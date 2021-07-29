@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
-* Студент: [Victoria Petruschenko](https://up.htmlacademy.ru/ecmascript/15/user/1620087).
-* Наставник: `Неизвестно`.
+* Студент: [Victoria Petruschenko](https://htmlacademy.ru/profile/id1620087).
+* Наставник: [Артём Рудов](https://htmlacademy.ru/profile/artrudov).
 
 ---
 
