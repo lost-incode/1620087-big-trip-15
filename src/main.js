@@ -5,6 +5,7 @@ import {createSiteTripFiltersTemplate} from './view/filters.js';
 import {createSiteTripSortingTemplate} from './view/sorting.js';
 import {createSiteTripEventsListTemplate} from './view/events-list.js';
 import {createSiteAddFormTemplate} from './view/add-form.js';
+import {createSiteEditFormTemplate} from './view/edit-form.js';
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -30,5 +31,6 @@ render(siteTripEventsElement, createSiteTripEventsListTemplate(), 'beforeend');
 
 const siteTripEventsListElement = siteTripEventsElement.querySelector('.trip-events__list');
 render(siteTripEventsListElement, createSiteAddFormTemplate(), 'beforeend');
+render(siteTripEventsListElement, createSiteEditFormTemplate(), 'beforeend');
 
 
