@@ -31,8 +31,8 @@ render(siteTripEventsElement, createSiteTripSortingTemplate(), 'beforeend');
 render(siteTripEventsElement, createSiteTripEventsListTemplate(), 'beforeend');
 
 const siteTripEventsListElement = siteTripEventsElement.querySelector('.trip-events__list');
-render(siteTripEventsListElement, createSiteAddFormTemplate(), 'beforeend');
 render(siteTripEventsListElement, createSiteEditFormTemplate(), 'beforeend');
+render(siteTripEventsListElement, createSiteAddFormTemplate(), 'beforeend');
 render(siteTripEventsListElement, createSiteTripPointTemplate(), 'beforeend');
 render(siteTripEventsListElement, createSiteTripPointTemplate(), 'beforeend');
 render(siteTripEventsListElement, createSiteTripPointTemplate(), 'beforeend');
