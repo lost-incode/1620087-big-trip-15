@@ -7,8 +7,9 @@ import {createSiteTripEventsListTemplate} from './view/events-list.js';
 import {createSiteAddFormTemplate} from './view/add-form.js';
 import {createSiteEditFormTemplate} from './view/edit-form.js';
 import {createSiteTripPointTemplate} from './view/trip-point.js';
+const TRIP_POINTS_COUNT = 3;
 
-const render = (container, template, place) => {
+const render = (container, template, place='beforeend') => {
   container.insertAdjacentHTML(place, template);
 };
 
@@ -18,21 +19,17 @@ const siteNavigationElement = siteHeaderElement.querySelector('.trip-controls__n
 const siteTripMainElement = siteHeaderElement.querySelector('.trip-main');
 const siteTripFiltersElement = siteTripMainElement.querySelector('.trip-controls__filters');
 const siteTripEventsElement = siteMainElement.querySelector('.trip-events');
-
-
-render(siteNavigationElement, createSiteMenuTemplate(), 'beforeend');
+// Rendering components to the page
+render(siteNavigationElement, createSiteMenuTemplate());
 render(siteTripMainElement, createSiteTripInfoTemplate(), 'afterbegin');
-
 const siteTripInfoSection = siteTripMainElement.querySelector('.trip-main__trip-info');
-
-render(siteTripInfoSection, createSiteTripCostTemplate(), 'beforeend');
-render(siteTripFiltersElement, createSiteTripFiltersTemplate(), 'beforeend');
-render(siteTripEventsElement, createSiteTripSortingTemplate(), 'beforeend');
-render(siteTripEventsElement, createSiteTripEventsListTemplate(), 'beforeend');
-
+render(siteTripInfoSection, createSiteTripCostTemplate());
+render(siteTripFiltersElement, createSiteTripFiltersTemplate());
+render(siteTripEventsElement, createSiteTripSortingTemplate());
+render(siteTripEventsElement, createSiteTripEventsListTemplate());
 const siteTripEventsListElement = siteTripEventsElement.querySelector('.trip-events__list');
-render(siteTripEventsListElement, createSiteEditFormTemplate(), 'beforeend');
-render(siteTripEventsListElement, createSiteAddFormTemplate(), 'beforeend');
-render(siteTripEventsListElement, createSiteTripPointTemplate(), 'beforeend');
-render(siteTripEventsListElement, createSiteTripPointTemplate(), 'beforeend');
-render(siteTripEventsListElement, createSiteTripPointTemplate(), 'beforeend');
+render(siteTripEventsListElement, createSiteEditFormTemplate());
+render(siteTripEventsListElement, createSiteAddFormTemplate());
+for (let i = 0; i < TRIP_POINTS_COUNT; i++) {
+  render(siteTripEventsListElement, createSiteTripPointTemplate());
+}
