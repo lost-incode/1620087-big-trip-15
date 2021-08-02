@@ -20,17 +20,23 @@ const siteNavigationElement = siteHeaderElement.querySelector('.trip-controls__n
 const siteTripMainElement = siteHeaderElement.querySelector('.trip-main');
 const siteTripFiltersElement = siteTripMainElement.querySelector('.trip-controls__filters');
 const siteTripEventsElement = siteMainElement.querySelector('.trip-events');
+
 // Rendering components to the page
 render(siteNavigationElement, createSiteMenuTemplate());
 render(siteTripMainElement, createSiteTripInfoTemplate(), 'afterbegin');
+
 const siteTripInfoSection = siteTripMainElement.querySelector('.trip-main__trip-info');
+
 render(siteTripInfoSection, createSiteTripCostTemplate());
 render(siteTripFiltersElement, createSiteTripFiltersTemplate());
 render(siteTripEventsElement, createSiteTripSortingTemplate());
 render(siteTripEventsElement, createSiteTripEventsListTemplate());
+
 const siteTripEventsListElement = siteTripEventsElement.querySelector('.trip-events__list');
+
 render(siteTripEventsListElement, createSiteEditFormTemplate());
 render(siteTripEventsListElement, createSiteAddFormTemplate());
+
 for (let i = 0; i < TRIP_POINTS_COUNT; i++) {
   render(siteTripEventsListElement, createSiteTripPointTemplate());
 }
