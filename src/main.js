@@ -7,7 +7,10 @@ import {createSiteTripEventsListTemplate} from './view/events-list.js';
 import {createSiteAddFormTemplate} from './view/add-form.js';
 import {createSiteEditFormTemplate} from './view/edit-form.js';
 import {createSiteTripPointTemplate} from './view/trip-point.js';
+import {generateTask} from './mock/task.js';
 
+const taskArray = generateTask();
+console.log(taskArray);
 const TRIP_POINTS_COUNT = 3;
 
 const render = (container, template, place='beforeend') => {
@@ -38,5 +41,5 @@ render(siteTripEventsListElement, createSiteEditFormTemplate());
 render(siteTripEventsListElement, createSiteAddFormTemplate());
 
 for (let i = 0; i < TRIP_POINTS_COUNT; i++) {
-  render(siteTripEventsListElement, createSiteTripPointTemplate());
+  render(siteTripEventsListElement, createSiteTripPointTemplate(taskArray));
 }
