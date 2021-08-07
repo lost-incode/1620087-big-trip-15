@@ -10,7 +10,7 @@ import {createSiteTripPointTemplate} from './view/trip-point.js';
 import {generateTask} from './mock/task.js';
 
 const taskArray = generateTask();
-console.log(taskArray);
+// console.log(taskArray);
 const TRIP_POINTS_COUNT = 3;
 
 const render = (container, template, place='beforeend') => {

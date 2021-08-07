@@ -148,5 +148,6 @@ export const generateTask = () => ({
     description: [generateDescription().join(' ')],
     images:  generateImages(),
   },
-  isFavorite: false,
+  basePrice: getRandomInteger(10, 3000),
+  isFavourite: Boolean(getRandomInteger(0, 1)),
 });
