@@ -9,9 +9,12 @@ import {createSiteEditFormTemplate} from './view/edit-form.js';
 import {createSiteTripPointTemplate} from './view/trip-point.js';
 import {generateTask} from './mock/task.js';
 
-const taskArray = generateTask();
-// console.log(taskArray);
-const TRIP_POINTS_COUNT = 3;
+const taskArrays = [];
+const ARRAYS_COUNT = 15;
+
+for (let i = 0; i < ARRAYS_COUNT; i++) {
+  taskArrays.push(generateTask());
+}
 
 const render = (container, template, place='beforeend') => {
   container.insertAdjacentHTML(place, template);
@@ -37,9 +40,9 @@ render(siteTripEventsElement, createSiteTripEventsListTemplate());
 
 const siteTripEventsListElement = siteTripEventsElement.querySelector('.trip-events__list');
 
-render(siteTripEventsListElement, createSiteEditFormTemplate());
+render(siteTripEventsListElement, createSiteEditFormTemplate(taskArrays[0]));
 render(siteTripEventsListElement, createSiteAddFormTemplate());
 
-for (let i = 0; i < TRIP_POINTS_COUNT; i++) {
+for (const taskArray of taskArrays) {
   render(siteTripEventsListElement, createSiteTripPointTemplate(taskArray));
 }

@@ -8,50 +8,70 @@ const pointOffers = {
     {
       'title': 'Add luggage',
       'price': 30,
+      'id': 'event-offer-luggage-1',
+      'name': 'event-offer-luggage',
     },
     {
       'title': 'Switch to comfort class',
       'price': 100,
+      'id': 'event-offer-comfort-1',
+      'name': 'event-offer-comfort',
     },
     {
       'title': 'Add meal',
       'price': 15,
+      'id': 'event-offer-meal-1',
+      'name': 'event-offer-meal',
     },
     {
       'title': 'Choose seats',
       'price': 5,
+      'id': 'event-offer-seats-1',
+      'name': 'event-offer-seats',
     },
     {
       'title': 'Travel by train',
       'price': 40,
+      'id': 'event-offer-train-1',
+      'name': 'event-offer-train',
     },
   ],
   'Taxi': [
     {
       'title': 'Order Uber',
       'price': 20,
+      'id': 'event-offer-uber-1',
+      'name': 'event-offer-uber',
     },
   ],
   'Drive': [
     {
       'title': 'Rent a car',
       'price': 200,
+      'id': 'event-offer-car-1',
+      'name': 'event-offer-car',
     },
   ],
   'Check-in': [
     {
       'title': 'Add breakfast',
       'price': 50,
+      'id': 'event-offer-breakfast-1',
+      'name': 'event-offer-breakfast',
     },
   ],
   'Sightseeing': [
     {
       'title': 'Book tickets',
       'price': 40,
+      'id': 'event-offer-tickets-1',
+      'name': 'event-offer-tickets',
     },
     {
       'title': 'Lunch in city',
       'price': 30,
+      'id': 'event-offer-lunch-1',
+      'name': 'event-offer-lunch',
     },
   ],
 };
@@ -92,7 +112,17 @@ const generateOffers = (type) => {
   if (!(type in pointOffers)) {
     return null;
   } else {
-    return pointOffers[type];
+    const randomCount = getRandomInteger(1, pointOffers[type].length - 1);
+    let randomOffers = [];
+    for (let i = 0; i < randomCount; i++) {
+      const offer = {
+        title: pointOffers[type][i].title,
+        price: pointOffers[type][i].price,
+      };
+      randomOffers.push(offer);
+    }
+    randomOffers = randomOffers.slice();
+    return randomOffers;
   }
 };
 
@@ -135,19 +165,22 @@ const generateImages = () => {
   return imagesLinks;
 };
 
-const taskType = generateType();
-const startDate = generateDate();
+const generateTask = () => {
+  const taskType = generateType();
+  const startDate = generateDate();
+  return {
+    type: taskType,
+    startDate: dayjs(startDate).format(DATE_FORMAT),
+    endDate: dayjs(generateDate(startDate)).format(DATE_FORMAT),
+    point: generatePoint(),
+    offers: generateOffers(taskType),
+    destination: {
+      description: [generateDescription().join(' ')],
+      images:  generateImages(),
+    },
+    basePrice: getRandomInteger(10, 3000),
+    isFavourite: Boolean(getRandomInteger(0, 1)),
+  };
+};
 
-export const generateTask = () => ({
-  type: taskType,
-  startDate: dayjs(startDate).format(DATE_FORMAT),
-  endDate: dayjs(generateDate(startDate)).format(DATE_FORMAT),
-  point: generatePoint(),
-  offers: generateOffers(taskType),
-  destination: {
-    description: [generateDescription().join(' ')],
-    images:  generateImages(),
-  },
-  basePrice: getRandomInteger(10, 3000),
-  isFavourite: Boolean(getRandomInteger(0, 1)),
-});
+export {pointOffers, generateTask};
