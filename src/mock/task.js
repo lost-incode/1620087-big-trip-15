@@ -113,7 +113,7 @@ const generateOffers = (type) => {
     return null;
   } else {
     const randomCount = getRandomInteger(1, pointOffers[type].length - 1);
-    let randomOffers = [];
+    const randomOffers = [];
     for (let i = 0; i < randomCount; i++) {
       const offer = {
         title: pointOffers[type][i].title,
@@ -121,7 +121,6 @@ const generateOffers = (type) => {
       };
       randomOffers.push(offer);
     }
-    randomOffers = randomOffers.slice();
     return randomOffers;
   }
 };
@@ -143,25 +142,21 @@ const generateDescription = () => {
   const randomCountDestinations = getRandomInteger(1, COUNT_OF_DESTINATIONS);
 
   let i = 0;
-  let textDestination = [];
+  const textDestination = [];
   while (i < randomCountDestinations) {
     const randomIndex = getRandomInteger(0, textDestinations.length - 1);
     textDestination.push(textDestinations[randomIndex]);
     i++;
   }
-  textDestination = textDestination.slice(); //строка, чтобы не ругался линтер
-
   return textDestination;
 };
 
 const generateImages = () => {
   const randomCountImages = getRandomInteger(1, COUNT_OF_DESTINATIONS);
-  let imagesLinks = [];
+  const imagesLinks = [];
   for (let i = 0; i < randomCountImages; i++) {
     imagesLinks.push(`http://picsum.photos/248/152?r=${Math.random()}`);
   }
-  imagesLinks = imagesLinks.slice(); //строка, чтобы не ругался линтер
-
   return imagesLinks;
 };
 
