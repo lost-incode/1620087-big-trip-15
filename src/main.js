@@ -9,11 +9,11 @@ import {createSiteEditFormTemplate} from './view/edit-form.js';
 import {createSiteTripPointTemplate} from './view/trip-point.js';
 import {generateTask} from './mock/task.js';
 
-const taskArrays = [];
+const taskArray = [];
 const ARRAYS_COUNT = 15;
 
 for (let i = 0; i < ARRAYS_COUNT; i++) {
-  taskArrays.push(generateTask());
+  taskArray.push(generateTask());
 }
 
 const render = (container, template, place='beforeend') => {
@@ -29,20 +29,20 @@ const siteTripEventsElement = siteMainElement.querySelector('.trip-events');
 
 // Rendering components to the page
 render(siteNavigationElement, createSiteMenuTemplate());
-render(siteTripMainElement, createSiteTripInfoTemplate(taskArrays), 'afterbegin');
+render(siteTripMainElement, createSiteTripInfoTemplate(taskArray), 'afterbegin');
 
 const siteTripInfoSection = siteTripMainElement.querySelector('.trip-main__trip-info');
 
-render(siteTripInfoSection, createSiteTripCostTemplate());
+render(siteTripInfoSection, createSiteTripCostTemplate(taskArray));
 render(siteTripFiltersElement, createSiteTripFiltersTemplate());
 render(siteTripEventsElement, createSiteTripSortingTemplate());
 render(siteTripEventsElement, createSiteTripEventsListTemplate());
 
 const siteTripEventsListElement = siteTripEventsElement.querySelector('.trip-events__list');
 
-render(siteTripEventsListElement, createSiteEditFormTemplate(taskArrays[0]));
+render(siteTripEventsListElement, createSiteEditFormTemplate(taskArray[0]));
 // render(siteTripEventsListElement, createSiteAddFormTemplate());
 
-for (const taskArray of taskArrays.slice(1)) {
-  render(siteTripEventsListElement, createSiteTripPointTemplate(taskArray));
+for (const task of taskArray.slice(1)) {
+  render(siteTripEventsListElement, createSiteTripPointTemplate(task));
 }
