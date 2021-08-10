@@ -2,6 +2,12 @@ import dayjs from 'dayjs';
 
 const COUNT_OF_DESTINATIONS = 5;
 const DATE_FORMAT= 'YYYY-MM-DDTHH:mm:ss.ms[Z]';
+const MAX_DAYS_GAP = 7;
+const MIN_DAYS_GAP = 1;
+const MIN_PRICE = 10;
+const MAX_PRICE = 3000;
+const BOOLEAN_FALSE = 0;
+const BOOLEAN_TRUE = 1;
 
 const pointOffers = {
   'Flight': [
@@ -76,6 +82,21 @@ const pointOffers = {
   ],
 };
 
+const pointCities = ['Tokio', 'New York', 'Volgograd', 'Kiev', 'Moscow'];
+const pointTypes = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
+const textDestinations = [
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+  'Cras aliquet varius magna, non porta ligula feugiat eget.',
+  'Fusce tristique felis at fermentum pharetra.',
+  'Aliquam id orci ut lectus varius viverra.',
+  'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.',
+  'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.',
+  'Sed sed nisi sed augue convallis suscipit in sed felis.',
+  'Aliquam erat volutpat.',
+  'Nunc fermentum tortor ac porta dapibus.',
+  'In rutrum ac purus sit amet tempus.',
+];
+
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -84,25 +105,21 @@ const getRandomInteger = (a = 0, b = 1) => {
 };
 
 const generateType = () => {
-  const pointTypes = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
   const randomIndex = getRandomInteger(0, pointTypes.length - 1);
-
   return pointTypes[randomIndex];
 };
 
 const generateDate = (firstDate = null) => {
   if (firstDate) {
-    const index = getRandomInteger(1, 7);
+    const index = getRandomInteger(MIN_DAYS_GAP, MAX_DAYS_GAP);
     return dayjs(firstDate).add(index, 'day');
   }
-  const maxDaysGap = 7;
-  const daysCount = getRandomInteger(-maxDaysGap, maxDaysGap);
+  const daysCount = getRandomInteger(-MAX_DAYS_GAP, MAX_DAYS_GAP);
 
   return dayjs().add(daysCount, 'day').toDate();
 };
 
 const generatePoint = () => {
-  const pointCities = ['Tokio', 'New York', 'Volgograd', 'Kiev', 'Moscow'];
   const randomIndex = getRandomInteger(0, pointCities.length - 1);
 
   return pointCities[randomIndex];
@@ -110,7 +127,7 @@ const generatePoint = () => {
 
 const generateOffers = (type) => {
   if (!(type in pointOffers)) {
-    return null;
+    return [];
   } else {
     const randomCount = getRandomInteger(1, pointOffers[type].length - 1);
     const randomOffers = [];
@@ -121,48 +138,39 @@ const generateOffers = (type) => {
       };
       randomOffers.push(offer);
     }
+
     return randomOffers;
   }
 };
 
 const generateDescription = () => {
-  const textDestinations = [
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    'Cras aliquet varius magna, non porta ligula feugiat eget.',
-    'Fusce tristique felis at fermentum pharetra.',
-    'Aliquam id orci ut lectus varius viverra.',
-    'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.',
-    'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.',
-    'Sed sed nisi sed augue convallis suscipit in sed felis.',
-    'Aliquam erat volutpat.',
-    'Nunc fermentum tortor ac porta dapibus.',
-    'In rutrum ac purus sit amet tempus.',
-  ];
-
   const randomCountDestinations = getRandomInteger(1, COUNT_OF_DESTINATIONS);
 
-  let i = 0;
   const textDestination = [];
-  while (i < randomCountDestinations) {
+  for (let i = 0; i < randomCountDestinations; i++) {
     const randomIndex = getRandomInteger(0, textDestinations.length - 1);
     textDestination.push(textDestinations[randomIndex]);
     i++;
   }
+
   return textDestination;
 };
 
-const generateImages = () => {
-  const randomCountImages = getRandomInteger(1, COUNT_OF_DESTINATIONS);
+const randomCountImages = getRandomInteger(1, COUNT_OF_DESTINATIONS);
+
+const generateImages = (countImages) => {
   const imagesLinks = [];
-  for (let i = 0; i < randomCountImages; i++) {
+  for (let i = 0; i < countImages; i++) {
     imagesLinks.push(`http://picsum.photos/248/152?r=${Math.random()}`);
   }
+
   return imagesLinks;
 };
 
 const generateTask = () => {
   const taskType = generateType();
   const startDate = generateDate();
+
   return {
     type: taskType,
     startDate: dayjs(startDate).format(DATE_FORMAT),
@@ -171,10 +179,10 @@ const generateTask = () => {
     offers: generateOffers(taskType),
     destination: {
       description: [generateDescription().join(' ')],
-      images:  generateImages(),
+      images:  generateImages(randomCountImages),
     },
-    basePrice: getRandomInteger(10, 3000),
-    isFavourite: Boolean(getRandomInteger(0, 1)),
+    basePrice: getRandomInteger(MIN_PRICE, MAX_PRICE),
+    isFavourite: Boolean(getRandomInteger(BOOLEAN_FALSE, BOOLEAN_TRUE)),
   };
 };
 

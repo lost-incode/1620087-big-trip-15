@@ -1,47 +1,37 @@
 import dayjs from 'dayjs';
 import {pointOffers} from '../mock/task.js';
 
-const renderOffers = (type, offers) => {
-  let offerSection = '';
-  if (offers) {
-    offerSection = `<section class="event__section  event__section--offers">
-          <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-          <div class="event__available-offers">`;
-    for (const offer of pointOffers[type]) {
+const renderOffers = (type, offers = []) => {
+  let offerSection;
+  if (pointOffers[type]) {
+    offerSection = pointOffers[type].map((offer) => {
+      let checkedOffer;
       if (offers.some((option) => option.title === offer.title)) {
-        offerSection += `<div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="${offer.id}" type="checkbox" name="${offer.name}" checked>
-          <label class="event__offer-label" for="${offer.id}">
-            <span class="event__offer-title">${offer.title}</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">${offer.price}</span>
-          </label>
-        </div>`;
+        checkedOffer = 'checked';
       } else {
-        offerSection += `<div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="${offer.id}" type="checkbox" name="${offer.name}">
-          <label class="event__offer-label" for="${offer.id}">
+        checkedOffer = '';
+      }
+
+      return `<div class="event__offer-selector">
+        <input class="event__offer-checkbox  visually-hidden" id="${offer.id}"
+        type="checkbox" name="${offer.name}" ${checkedOffer}>
+        <label class="event__offer-label" for="${offer.id}">
             <span class="event__offer-title">${offer.title}</span>
             &plus;&euro;&nbsp;
             <span class="event__offer-price">${offer.price}</span>
           </label>
         </div>`;
-      }
-    }
-    offerSection +='</div></section>';
+    });
   }
-  return offerSection;
+  return (offers.length) ? `<section class="event__section  event__section--offers">
+    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+    <div class="event__available-offers">${offerSection.join('')}</div></section>` : '';
 };
 
-const renderDestination = (destination) => {
-  if (!destination || !destination.description) {
-    return '';
-  }
-  return `<section class="event__section  event__section--destination">
+const renderDestination = (description) => (description.length) ? `<section class="event__section  event__section--destination">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">${destination.description}</p>
-    </section>`;
-};
+    <p class="event__destination-description">${description}</p>
+    </section>` : '';
 
 export const createSiteEditFormTemplate = (data) => (
   `<li class="trip-events__item">
@@ -147,7 +137,7 @@ export const createSiteEditFormTemplate = (data) => (
       </header>
       <section class="event__details">
       ${renderOffers(data.type, data.offers)}
-      ${renderDestination(data.destination)}
+      ${renderDestination(data.destination.description)}
       </section>
     </form>
   </li>`

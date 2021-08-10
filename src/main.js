@@ -4,18 +4,18 @@ import {createSiteTripCostTemplate} from './view/trip-cost.js';
 import {createSiteTripFiltersTemplate} from './view/filters.js';
 import {createSiteTripSortingTemplate} from './view/sorting.js';
 import {createSiteTripEventsListTemplate} from './view/events-list.js';
-// import {createSiteAddFormTemplate} from './view/add-form.js';
 import {createSiteEditFormTemplate} from './view/edit-form.js';
 import {createSiteTripPointTemplate} from './view/trip-point.js';
 import {generateTask} from './mock/task.js';
 
-const taskArray = [];
 const ARRAYS_COUNT = 15;
+
+const taskArray = [];
 
 for (let i = 0; i < ARRAYS_COUNT; i++) {
   taskArray.push(generateTask());
 }
-
+// console.log(taskArray[0])
 const render = (container, template, place='beforeend') => {
   container.insertAdjacentHTML(place, template);
 };
@@ -41,7 +41,6 @@ render(siteTripEventsElement, createSiteTripEventsListTemplate());
 const siteTripEventsListElement = siteTripEventsElement.querySelector('.trip-events__list');
 
 render(siteTripEventsListElement, createSiteEditFormTemplate(taskArray[0]));
-// render(siteTripEventsListElement, createSiteAddFormTemplate());
 
 for (const task of taskArray.slice(1)) {
   render(siteTripEventsListElement, createSiteTripPointTemplate(task));
