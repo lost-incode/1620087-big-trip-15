@@ -1,40 +1,8 @@
 import dayjs from 'dayjs';
 
-const convertTimeDifference = (ms) => {
-  let days = Math.floor(ms / (24*60*60*1000));
-  const daysms=ms % (24*60*60*1000);
-  let hours = Math.floor((daysms)/(60*60*1000));
-  const hoursms=ms % (60*60*1000);
-  let minutes = Math.floor((hoursms)/(60*1000));
-  if (hours < 10) {
-    hours = `0${hours}H `;
-  } else {
-    hours = `${hours}H `;
-  }
-  if (minutes < 10) {
-    minutes = `0${minutes}M `;
-  } else {
-    minutes = `${minutes}M `;
-  }
-  if ((days > 1) && (days < 10)) {
-    days = `0${days}D `;
-  } else if (days <= 1) {
-    days = '';
-    if (hours < 1) {
-      hours = '';
-    }
-  } else {
-    days = `${days}D `;
-  }
-  return `${days}${hours}${minutes}`;
-};
-
-
-const renderDuration = (startDate, endDate) => {
-  const daifferenceMs = dayjs(endDate).diff(dayjs(startDate));
-  const differenceDate = convertTimeDifference(daifferenceMs);
-  return `<p class="event__duration">${differenceDate}</p>`;
-};
+const renderDuration = (startDate, endDate) => `<p class="event__duration">
+  ${dayjs(endDate).diff(dayjs(startDate), 'd h m')}
+  </p>`;
 
 const renderOffers = (offers = []) => `<h4 class="visually-hidden">Offers:</h4>
   <ul class="event__selected-offers">
@@ -66,7 +34,7 @@ export const createSiteTripPointTemplate = (data) => (
     </p>
   ${renderOffers(data.offers)}
   <button
-    class="event__favorite-btn ${(isFavourite) ?  'event__favorite-btn--active': ''}" type="button">
+    class="event__favorite-btn ${(data.isFavourite) ?  'event__favorite-btn--active': ''}" type="button">
     <span class="visually-hidden">Add to favorite</span>
     <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
       <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
