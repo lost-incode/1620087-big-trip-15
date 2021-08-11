@@ -108,10 +108,9 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-const generateType = () => {
-  const randomIndex = getRandomInteger(0, pointTypes.length - 1);
-  return pointTypes[randomIndex];
-};
+const randomTypeIndex = getRandomInteger(0, pointTypes.length - 1);
+
+const generateType = (index) => pointTypes[index];
 
 const generateDate = (firstDate = null) => {
   if (firstDate) {
@@ -123,11 +122,9 @@ const generateDate = (firstDate = null) => {
   return dayjs().add(daysCount, 'day').toDate();
 };
 
-const generatePoint = () => {
-  const randomIndex = getRandomInteger(0, pointCities.length - 1);
+const randomPointIndex = getRandomInteger(0, pointCities.length - 1);
 
-  return pointCities[randomIndex];
-};
+const generatePoint = (index) => pointCities[index];
 
 const generateOffers = (type) => {
   if (!pointOffers[type].length) {
@@ -139,11 +136,11 @@ const generateOffers = (type) => {
   }
 };
 
-const generateDescription = () => {
-  const randomCountDestinations = getRandomInteger(1, COUNT_OF_DESTINATIONS);
+const randomCountDestinations = getRandomInteger(1, COUNT_OF_DESTINATIONS);
 
+const generateDescription = (index) => {
   const textDestination = [];
-  for (let i = 0; i < randomCountDestinations; i++) {
+  for (let i = 0; i < index; i++) {
     const randomIndex = getRandomInteger(0, textDestinations.length - 1);
     textDestination.push(textDestinations[randomIndex]);
     i++;
@@ -164,17 +161,17 @@ const generateImages = (countImages) => {
 };
 
 const generateTask = () => {
-  const taskType = generateType();
+  const taskType = generateType(randomTypeIndex);
   const startDate = generateDate();
 
   return {
     type: taskType,
     startDate: dayjs(startDate).format(DATE_FORMAT),
     endDate: dayjs(generateDate(startDate)).format(DATE_FORMAT),
-    point: generatePoint(),
+    point: generatePoint(randomPointIndex),
     offers: generateOffers(taskType),
     destination: {
-      description: [generateDescription().join(' ')],
+      description: [generateDescription(randomCountDestinations).join(' ')],
       images:  generateImages(randomCountImages),
     },
     basePrice: getRandomInteger(MIN_PRICE, MAX_PRICE),
