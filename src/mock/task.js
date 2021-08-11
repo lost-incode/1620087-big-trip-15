@@ -80,6 +80,10 @@ const pointOffers = {
       'name': 'event-offer-lunch',
     },
   ],
+  'Bus': [],
+  'Train': [],
+  'Ship': [],
+  'Restaurant': [],
 };
 
 const pointCities = ['Tokio', 'New York', 'Volgograd', 'Kiev', 'Moscow'];
@@ -126,7 +130,7 @@ const generatePoint = () => {
 };
 
 const generateOffers = (type) => {
-  if (!(type in pointOffers)) {
+  if (!pointOffers[type].length) {
     return [];
   } else {
     const randomCount = getRandomInteger(1, pointOffers[type].length - 1);
