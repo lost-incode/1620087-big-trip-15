@@ -36,38 +36,22 @@ const renderDuration = (startDate, endDate) => {
   return `<p class="event__duration">${differenceDate}</p>`;
 };
 
-const renderOffers = (offers) => {
-  if (!offers) {
-    return '';
-  }
-  let htmlCode = '<h4 class="visually-hidden">Offers:</h4>  <ul class="event__selected-offers">';
-  for (const offer of offers) {
-    htmlCode += `<li class="event__offer">
-      <span class="event__offer-title">${offer.title}</span>
-        &plus;&euro;&nbsp;
-      <span class="event__offer-price">${offer.price}</span>
-    </li>`;
-  }
-  htmlCode += '</ul>';
-  return htmlCode;
-};
+const renderOffers = (offers = []) => `<h4 class="visually-hidden">Offers:</h4>
+  <ul class="event__selected-offers">
+  ${offers.map(({title, price}) => (`<li class="event__offer">
+  <span class="event__offer-title">${title}</span>
+    &plus;&euro;&nbsp;
+  <span class="event__offer-price">${price}</span>
+  </li>`))}
+  </ul>`;
 
-const isActive = (isFavourite) => {
-  if (isFavourite) {
-    return `<button class="event__favorite-btn event__favorite-btn--active" type="button">
-              <span class="visually-hidden">Add to favorite</span>
-              <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
-                <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
-              </svg>
-            </button>`;
-  }
-  return `<button class="event__favorite-btn" type="button">
-            <span class="visually-hidden">Add to favorite</span>
-            <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
-              <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
-            </svg>
-          </button>`;
-};
+const isActive = (isFavourite) => `<button
+  class="event__favorite-btn ${(isFavourite) ?  'event__favorite-btn--active': ''}" type="button">
+  <span class="visually-hidden">Add to favorite</span>
+  <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
+  <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
+  </svg>
+  </button>`;
 
 export const createSiteTripPointTemplate = (data) => (
   `<li class="trip-events__item">

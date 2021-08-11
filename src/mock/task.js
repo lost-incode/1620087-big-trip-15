@@ -108,8 +108,6 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-const randomTypeIndex = getRandomInteger(0, pointTypes.length - 1);
-
 const generateType = (index) => pointTypes[index];
 
 const generateDate = (firstDate = null) => {
@@ -121,8 +119,6 @@ const generateDate = (firstDate = null) => {
 
   return dayjs().add(daysCount, 'day').toDate();
 };
-
-const randomPointIndex = getRandomInteger(0, pointCities.length - 1);
 
 const generatePoint = (index) => pointCities[index];
 
@@ -136,8 +132,6 @@ const generateOffers = (type) => {
   }
 };
 
-const randomCountDestinations = getRandomInteger(1, COUNT_OF_DESTINATIONS);
-
 const generateDescription = (index) => {
   const textDestination = [];
   for (let i = 0; i < index; i++) {
@@ -149,8 +143,6 @@ const generateDescription = (index) => {
   return textDestination;
 };
 
-const randomCountImages = getRandomInteger(1, COUNT_OF_DESTINATIONS);
-
 const generateImages = (countImages) => {
   const imagesLinks = [];
   for (let i = 0; i < countImages; i++) {
@@ -161,8 +153,12 @@ const generateImages = (countImages) => {
 };
 
 const generateTask = () => {
+  const randomTypeIndex = getRandomInteger(0, pointTypes.length - 1);
   const taskType = generateType(randomTypeIndex);
   const startDate = generateDate();
+  const randomPointIndex = getRandomInteger(0, pointCities.length - 1);
+  const randomCountDestinations = getRandomInteger(1, COUNT_OF_DESTINATIONS);
+  const randomCountImages = getRandomInteger(1, COUNT_OF_DESTINATIONS);
 
   return {
     type: taskType,
