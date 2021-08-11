@@ -108,7 +108,7 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-const generateType = (index) => pointTypes[index];
+const generateType = (pointIndex) => pointTypes[pointIndex];
 
 const generateDate = (firstDate = null) => {
   if (firstDate) {
@@ -120,7 +120,7 @@ const generateDate = (firstDate = null) => {
   return dayjs().add(daysCount, 'day').toDate();
 };
 
-const generatePoint = (index) => pointCities[index];
+const generatePoint = (pointCityIndex) => pointCities[pointCityIndex];
 
 const generateOffers = (type) => {
   if (!pointOffers[type].length) {
@@ -132,9 +132,9 @@ const generateOffers = (type) => {
   }
 };
 
-const generateDescription = (index) => {
+const generateDescription = (sentencesCount) => {
   const textDestination = [];
-  for (let i = 0; i < index; i++) {
+  for (let i = 0; i < sentencesCount; i++) {
     const randomIndex = getRandomInteger(0, textDestinations.length - 1);
     textDestination.push(textDestinations[randomIndex]);
     i++;
@@ -143,9 +143,9 @@ const generateDescription = (index) => {
   return textDestination;
 };
 
-const generateImages = (countImages) => {
+const generateImages = (imagesCount) => {
   const imagesLinks = [];
-  for (let i = 0; i < countImages; i++) {
+  for (let i = 0; i < imagesCount; i++) {
     imagesLinks.push(`http://picsum.photos/248/152?r=${Math.random()}`);
   }
 
