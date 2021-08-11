@@ -13,8 +13,7 @@ const renderOffers = (offers = []) => `<h4 class="visually-hidden">Offers:</h4>
   </li>`))}
   </ul>`;
 
-export const createSiteTripPointTemplate = ({type, startDate, endDate, point, offers, basePrice, isFavourite}) => (
-  `<li class="trip-events__item">
+export const createSiteTripPointTemplate = ({type, startDate, endDate, point, offers, basePrice, isFavourite}) => `<li class="trip-events__item">
   <div class="event">
     <time class="event__date" datetime="2019-03-18">${dayjs(startDate).format('DD MMM')}</time>
     <div class="event__type">
@@ -44,5 +43,4 @@ export const createSiteTripPointTemplate = ({type, startDate, endDate, point, of
       <span class="visually-hidden">Open event</span>
     </button>
   </div>
-  </li>`
-);
+  </li>`;
