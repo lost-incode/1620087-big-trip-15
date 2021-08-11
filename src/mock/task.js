@@ -134,16 +134,8 @@ const generateOffers = (type) => {
     return [];
   } else {
     const randomCount = getRandomInteger(1, pointOffers[type].length - 1);
-    const randomOffers = [];
-    for (let i = 0; i < randomCount; i++) {
-      const offer = {
-        title: pointOffers[type][i].title,
-        price: pointOffers[type][i].price,
-      };
-      randomOffers.push(offer);
-    }
 
-    return randomOffers;
+    return pointOffers[type].slice(randomCount).map(({title, price}) => ({title, price}));
   }
 };
 
