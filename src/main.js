@@ -15,7 +15,7 @@ const taskArray = [];
 for (let i = 0; i < ARRAYS_COUNT; i++) {
   taskArray.push(generateTask());
 }
-// console.log(taskArray)
+
 const render = (container, template, place='beforeend') => {
   container.insertAdjacentHTML(place, template);
 };

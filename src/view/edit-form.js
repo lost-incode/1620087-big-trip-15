@@ -28,7 +28,7 @@ const renderDestination = (description) => (description.length) ? `<section clas
     <p class="event__destination-description">${description}</p>
     </section>` : '';
 
-export const createSiteEditFormTemplate = (data) => (
+export const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, destination, basePrice}) => (
   `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
@@ -98,9 +98,9 @@ export const createSiteEditFormTemplate = (data) => (
 
         <div class="event__field-group  event__field-group--destination">
           <label class="event__label  event__type-output" for="event-destination-1">
-            ${data.type}
+            ${type}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${data.point}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${point}" list="destination-list-1">
           <datalist id="destination-list-1">
             <option value="Amsterdam"></option>
             <option value="Geneva"></option>
@@ -110,10 +110,10 @@ export const createSiteEditFormTemplate = (data) => (
 
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dayjs(data.startDate).format('DD/MM/YY HH:MM')}">
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dayjs(startDate).format('DD/MM/YY HH:MM')}">
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dayjs(data.endDate).format('DD/MM/YY HH:MM')}">
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dayjs(endDate).format('DD/MM/YY HH:MM')}">
         </div>
 
         <div class="event__field-group  event__field-group--price">
@@ -121,7 +121,7 @@ export const createSiteEditFormTemplate = (data) => (
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${data.basePrice}">
+          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -131,8 +131,8 @@ export const createSiteEditFormTemplate = (data) => (
         </button>
       </header>
       <section class="event__details">
-      ${renderOffers(data.type, data.offers)}
-      ${renderDestination(data.destination.description)}
+      ${renderOffers(type, offers)}
+      ${renderDestination(destination.description)}
       </section>
     </form>
   </li>`
