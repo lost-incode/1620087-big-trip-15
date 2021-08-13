@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {createElement} from '../utils.js';
 
 const FIRST_POINT_INDEX = 0;
 const SECOND_POINT_INDEX = 1;
@@ -11,7 +12,7 @@ const formatEndDate = (startDate, endDate) => {
   return dayjs(endDate).format('MMM DD');
 };
 
-export const createSiteTripInfoTemplate = (dataArray) => {
+const createSiteTripInfoTemplate = (dataArray) => {
   const lastPointIndex = dataArray.length - 1;
 
   return `<section class="trip-main__trip-info  trip-info">
@@ -29,3 +30,26 @@ export const createSiteTripInfoTemplate = (dataArray) => {
     </div>
   </section>`;
 };
+
+export default class TripInfo {
+  constructor(points) {
+    this._points = points;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSiteTripInfoTemplate(this._points);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
