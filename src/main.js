@@ -1,4 +1,4 @@
-import {createSiteMenuTemplate} from './view/menu.js';
+import SiteMenuView from './view/menu.js';
 import {createSiteTripInfoTemplate} from './view/trip-info.js';
 import {createSiteTripCostTemplate} from './view/trip-cost.js';
 import TripFiltersView from './view/filters.js';
@@ -25,7 +25,7 @@ const siteTripFiltersElement = siteTripMainElement.querySelector('.trip-controls
 const siteTripEventsElement = siteMainElement.querySelector('.trip-events');
 
 // Rendering components to the page
-renderTemplate(siteNavigationElement, createSiteMenuTemplate());
+renderElement(siteNavigationElement, new SiteMenuView().getElement());
 renderTemplate(siteTripMainElement, createSiteTripInfoTemplate(taskArray), RenderPosition.AFTERBEGIN);
 
 const siteTripInfoSection = siteTripMainElement.querySelector('.trip-main__trip-info');
