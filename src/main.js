@@ -7,7 +7,7 @@ import {createSiteTripEventsListTemplate} from './view/events-list.js';
 import {createSiteEditFormTemplate} from './view/edit-form.js';
 import {createSiteTripPointTemplate} from './view/trip-point.js';
 import {generateTask} from './mock/task.js';
-import {renderTemplate} from './utils.js';
+import {renderTemplate, RenderPosition} from './utils.js';
 
 const ARRAYS_COUNT = 15;
 
@@ -26,7 +26,7 @@ const siteTripEventsElement = siteMainElement.querySelector('.trip-events');
 
 // Rendering components to the page
 renderTemplate(siteNavigationElement, createSiteMenuTemplate());
-renderTemplate(siteTripMainElement, createSiteTripInfoTemplate(taskArray), 'afterbegin');
+renderTemplate(siteTripMainElement, createSiteTripInfoTemplate(taskArray), RenderPosition.AFTERBEGIN);
 
 const siteTripInfoSection = siteTripMainElement.querySelector('.trip-main__trip-info');
 

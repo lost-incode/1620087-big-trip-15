@@ -1,4 +1,6 @@
-export const createSiteAddFormTemplate = () => (
+import {createElement} from '../utils.js';
+
+const createSiteAddFormTemplate = () => (
   `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
@@ -167,3 +169,25 @@ export const createSiteAddFormTemplate = () => (
     </form>
   </li>`
 );
+
+export default class AddForm {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSiteAddFormTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
