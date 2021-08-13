@@ -4,7 +4,7 @@ import {createSiteTripCostTemplate} from './view/trip-cost.js';
 import TripFiltersView from './view/filters.js';
 import TripSortingView from './view/sorting.js';
 import EventsListView from './view/events-list.js';
-import {createSiteEditFormTemplate} from './view/edit-form.js';
+import EditingFormView from './view/edit-form.js';
 import {createSiteTripPointTemplate} from './view/trip-point.js';
 import {generateTask} from './mock/task.js';
 import {renderTemplate, renderElement, RenderPosition} from './utils.js';
@@ -37,7 +37,7 @@ renderElement(siteTripEventsElement, new EventsListView().getElement());
 
 const siteTripEventsListElement = siteTripEventsElement.querySelector('.trip-events__list');
 
-renderTemplate(siteTripEventsListElement, createSiteEditFormTemplate(taskArray[0]));
+renderElement(siteTripEventsListElement, new EditingFormView(taskArray[0]).getElement());
 
 for (const task of taskArray.slice(1)) {
   renderTemplate(siteTripEventsListElement, createSiteTripPointTemplate(task));

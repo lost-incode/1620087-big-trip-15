@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {createElement} from '../utils.js';
 import {pointOffers} from '../mock/task.js';
 
 const renderCheckboxDiv = (offer, offers) => {
@@ -28,7 +29,7 @@ const renderDestination = (description) => description && `<section class="event
     <p class="event__destination-description">${description}</p>
     </section>`;
 
-export const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, destination, basePrice}) => `<li class="trip-events__item">
+const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, destination, basePrice}) => `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
@@ -135,3 +136,26 @@ export const createSiteEditFormTemplate = ({type, startDate, endDate, point, off
       </section>
     </form>
   </li>`;
+
+export default class EditingForm {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSiteEditFormTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
