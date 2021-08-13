@@ -3,11 +3,11 @@ import {createSiteTripInfoTemplate} from './view/trip-info.js';
 import {createSiteTripCostTemplate} from './view/trip-cost.js';
 import {createSiteTripFiltersTemplate} from './view/filters.js';
 import {createSiteTripSortingTemplate} from './view/sorting.js';
-import {createSiteTripEventsListTemplate} from './view/events-list.js';
+import EventsListView from './view/events-list.js';
 import {createSiteEditFormTemplate} from './view/edit-form.js';
 import {createSiteTripPointTemplate} from './view/trip-point.js';
 import {generateTask} from './mock/task.js';
-import {renderTemplate, RenderPosition} from './utils.js';
+import {renderTemplate, renderElement, RenderPosition} from './utils.js';
 
 const ARRAYS_COUNT = 15;
 
@@ -33,7 +33,7 @@ const siteTripInfoSection = siteTripMainElement.querySelector('.trip-main__trip-
 renderTemplate(siteTripInfoSection, createSiteTripCostTemplate(taskArray));
 renderTemplate(siteTripFiltersElement, createSiteTripFiltersTemplate());
 renderTemplate(siteTripEventsElement, createSiteTripSortingTemplate());
-renderTemplate(siteTripEventsElement, createSiteTripEventsListTemplate());
+renderElement(siteTripEventsElement, new EventsListView().getElement());
 
 const siteTripEventsListElement = siteTripEventsElement.querySelector('.trip-events__list');
 
