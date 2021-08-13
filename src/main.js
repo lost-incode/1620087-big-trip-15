@@ -2,7 +2,7 @@ import SiteMenuView from './view/menu.js';
 import {createSiteTripInfoTemplate} from './view/trip-info.js';
 import {createSiteTripCostTemplate} from './view/trip-cost.js';
 import TripFiltersView from './view/filters.js';
-import {createSiteTripSortingTemplate} from './view/sorting.js';
+import TripSortingView from './view/sorting.js';
 import EventsListView from './view/events-list.js';
 import {createSiteEditFormTemplate} from './view/edit-form.js';
 import {createSiteTripPointTemplate} from './view/trip-point.js';
@@ -32,7 +32,7 @@ const siteTripInfoSection = siteTripMainElement.querySelector('.trip-main__trip-
 
 renderTemplate(siteTripInfoSection, createSiteTripCostTemplate(taskArray));
 renderElement(siteTripFiltersElement, new TripFiltersView().getElement());
-renderTemplate(siteTripEventsElement, createSiteTripSortingTemplate());
+renderElement(siteTripEventsElement, new TripSortingView().getElement());
 renderElement(siteTripEventsElement, new EventsListView().getElement());
 
 const siteTripEventsListElement = siteTripEventsElement.querySelector('.trip-events__list');
