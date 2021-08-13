@@ -7,15 +7,44 @@ import EventsListView from './view/events-list.js';
 import EditingFormView from './view/edit-form.js';
 import TripPointView from './view/trip-point.js';
 import {generatePoint} from './mock/task.js';
-import {renderElement, RenderPosition} from './utils.js';
+import {render, RenderPosition} from './utils.js';
 
-const ARRAYS_COUNT = 15;
+const POINT_COUNT = 22;
 
-const taskArray = [];
+const renderPoint = (pointListElement, point) => {
+  const pointComponent = new TripPointView(point);
+  const pointEditComponent = new EditingFormView(point);
 
-for (let i = 0; i < ARRAYS_COUNT; i++) {
-  taskArray.push(generatePoint());
-}
+  const replacePointToForm = () => {
+    pointListElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+  };
+
+  const replaceFormToPoint = () => {
+    pointListElement.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
+  };
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      replaceFormToPoint();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
+  pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replacePointToForm();
+  });
+
+  pointEditComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    replaceFormToPoint();
+    document.removeEventListener('keydown', onEscKeyDown);
+  });
+
+  render(pointListElement, pointComponent.getElement());
+};
+
+const points = new Array(POINT_COUNT).fill().map(generatePoint);
 
 const siteHeaderElement = document.querySelector('.page-header');
 const siteMainElement = document.querySelector('.page-main');
@@ -25,20 +54,18 @@ const siteTripFiltersElement = siteTripMainElement.querySelector('.trip-controls
 const siteTripEventsElement = siteMainElement.querySelector('.trip-events');
 
 // Rendering components to the page
-renderElement(siteNavigationElement, new SiteMenuView().getElement());
-renderElement(siteTripMainElement, new TripInfoView(taskArray).getElement(), RenderPosition.AFTERBEGIN);
+render(siteNavigationElement, new SiteMenuView().getElement());
 
-const siteTripInfoSection = siteTripMainElement.querySelector('.trip-main__trip-info');
+const siteInfoComponent = new TripInfoView(points);
+render(siteTripMainElement, siteInfoComponent.getElement(), RenderPosition.AFTERBEGIN);
 
-renderElement(siteTripInfoSection, new TripCostView(taskArray).getElement());
-renderElement(siteTripFiltersElement, new TripFiltersView().getElement());
-renderElement(siteTripEventsElement, new TripSortingView().getElement());
-renderElement(siteTripEventsElement, new EventsListView().getElement());
+render(siteInfoComponent, new TripCostView(points).getElement());
+render(siteTripFiltersElement, new TripFiltersView().getElement());
+render(siteTripEventsElement, new TripSortingView().getElement());
 
-const siteTripEventsListElement = siteTripEventsElement.querySelector('.trip-events__list');
+const pointListComponent =  new EventsListView();
+render(siteTripEventsElement, pointListComponent.getElement());
 
-renderElement(siteTripEventsListElement, new EditingFormView(taskArray[0]).getElement());
-
-for (const task of taskArray.slice(1)) {
-  renderElement(siteTripEventsListElement, new TripPointView(task).getElement());
+for (const point of points) {
+  renderPoint(pointListComponent.getElement(), point);
 }

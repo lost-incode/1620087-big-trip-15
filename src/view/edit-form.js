@@ -1,6 +1,20 @@
 import dayjs from 'dayjs';
 import {createElement} from '../utils.js';
-import {pointOffers} from '../mock/task.js';
+import {pointOffers, POINT_TYPES, DATE_FORMAT, POINT_CITIES, MIN_PRICE} from '../mock/task.js';
+
+const DEFAULT_POINT = {
+  type: POINT_TYPES[0],
+  startDate: dayjs().format(DATE_FORMAT),
+  endDate: dayjs().format(DATE_FORMAT),
+  point: POINT_CITIES[0],
+  offers: pointOffers[POINT_TYPES[0]],
+  destination: {
+    description: [],
+    images:  [],
+  },
+  basePrice: MIN_PRICE,
+  isFavourite: false,
+};
 
 const renderCheckboxDiv = (offer, offers) => {
   const checkedOffer = (offers.find((option) => option.title === offer.title)) ? 'checked' : '';
@@ -138,7 +152,7 @@ const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, de
   </li>`;
 
 export default class EditingForm {
-  constructor(point) {
+  constructor(point = DEFAULT_POINT) {
     this._point = point;
     this._element = null;
   }

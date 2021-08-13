@@ -102,20 +102,6 @@ const TEXT_DESTINATIONS = [
   'In rutrum ac purus sit amet tempus.',
 ];
 
-const DEFAULT_POINT = {
-  type: POINT_TYPES[0],
-  startDate: dayjs().format(DATE_FORMAT),
-  endDate: dayjs().format(DATE_FORMAT),
-  point: POINT_CITIES[0],
-  offers: pointOffers[POINT_TYPES[0]],
-  destination: {
-    description: [],
-    images:  [],
-  },
-  basePrice: MIN_PRICE,
-  isFavourite: false,
-};
-
 const generateType = (pointIndex) => POINT_TYPES[pointIndex];
 
 const generateDate = (firstDate = null) => {
@@ -160,8 +146,7 @@ const generateImages = (imagesCount) => {
   return imagesLinks;
 };
 
-const generatePoint = (point = DEFAULT_POINT) => {
-  point;
+const generatePoint = () => {
   const randomTypeIndex = getRandomInteger(0, POINT_TYPES.length - 1);
   const taskType = generateType(randomTypeIndex);
   const startDate = generateDate();
@@ -184,4 +169,4 @@ const generatePoint = (point = DEFAULT_POINT) => {
   };
 };
 
-export {pointOffers, generatePoint};
+export {pointOffers, POINT_TYPES, DATE_FORMAT, POINT_CITIES, MIN_PRICE, generatePoint};
