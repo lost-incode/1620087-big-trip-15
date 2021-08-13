@@ -7,10 +7,10 @@ const renderDuration = (startDate, endDate) => `<p class="event__duration">
 const renderOffers = (offers = []) => `<h4 class="visually-hidden">Offers:</h4>
   <ul class="event__selected-offers">
   ${offers.map(({title, price}) => (`<li class="event__offer">
-  <span class="event__offer-title">${title}</span>
-    &plus;&euro;&nbsp;
+  <span class="event__offer-title">${title}
+  </span>&plus;&euro;&nbsp;
   <span class="event__offer-price">${price}</span>
-  </li>`))}
+  </li>`)).join('')}
   </ul>`;
 
 export const createSiteTripPointTemplate = ({type, startDate, endDate, point, offers, basePrice, isFavourite}) => `<li class="trip-events__item">
