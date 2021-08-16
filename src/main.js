@@ -1,24 +1,50 @@
-import {createSiteMenuTemplate} from './view/menu.js';
-import {createSiteTripInfoTemplate} from './view/trip-info.js';
-import {createSiteTripCostTemplate} from './view/trip-cost.js';
-import {createSiteTripFiltersTemplate} from './view/filters.js';
-import {createSiteTripSortingTemplate} from './view/sorting.js';
-import {createSiteTripEventsListTemplate} from './view/events-list.js';
-import {createSiteEditFormTemplate} from './view/edit-form.js';
-import {createSiteTripPointTemplate} from './view/trip-point.js';
-import {generateTask} from './mock/task.js';
+import SiteMenuView from './view/menu.js';
+import TripInfoView from './view/trip-info.js';
+import TripCostView from './view/trip-cost.js';
+import TripFiltersView from './view/filters.js';
+import TripSortingView from './view/sorting.js';
+import EventsListView from './view/events-list.js';
+import EditingFormView from './view/edit-form.js';
+import TripPointView from './view/trip-point.js';
+import {generatePoint} from './mock/task.js';
+import {render, RenderPosition} from './utils.js';
 
-const ARRAYS_COUNT = 15;
+const POINT_COUNT = 22;
 
-const taskArray = [];
+const renderPoint = (pointListElement, point) => {
+  const pointComponent = new TripPointView(point);
+  const pointEditComponent = new EditingFormView(point);
 
-for (let i = 0; i < ARRAYS_COUNT; i++) {
-  taskArray.push(generateTask());
-}
+  const replacePointToForm = () => {
+    pointListElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+  };
 
-const render = (container, template, place='beforeend') => {
-  container.insertAdjacentHTML(place, template);
+  const replaceFormToPoint = () => {
+    pointListElement.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
+  };
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      replaceFormToPoint();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
+  pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replacePointToForm();
+  });
+
+  pointEditComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    replaceFormToPoint();
+    document.removeEventListener('keydown', onEscKeyDown);
+  });
+
+  render(pointListElement, pointComponent.getElement());
 };
+
+const points = new Array(POINT_COUNT).fill().map(generatePoint);
 
 const siteHeaderElement = document.querySelector('.page-header');
 const siteMainElement = document.querySelector('.page-main');
@@ -28,20 +54,18 @@ const siteTripFiltersElement = siteTripMainElement.querySelector('.trip-controls
 const siteTripEventsElement = siteMainElement.querySelector('.trip-events');
 
 // Rendering components to the page
-render(siteNavigationElement, createSiteMenuTemplate());
-render(siteTripMainElement, createSiteTripInfoTemplate(taskArray), 'afterbegin');
+render(siteNavigationElement, new SiteMenuView().getElement());
 
-const siteTripInfoSection = siteTripMainElement.querySelector('.trip-main__trip-info');
+const siteInfoComponent = new TripInfoView(points);
+render(siteTripMainElement, siteInfoComponent.getElement(), RenderPosition.AFTERBEGIN);
 
-render(siteTripInfoSection, createSiteTripCostTemplate(taskArray));
-render(siteTripFiltersElement, createSiteTripFiltersTemplate());
-render(siteTripEventsElement, createSiteTripSortingTemplate());
-render(siteTripEventsElement, createSiteTripEventsListTemplate());
+render(siteInfoComponent, new TripCostView(points).getElement());
+render(siteTripFiltersElement, new TripFiltersView().getElement());
+render(siteTripEventsElement, new TripSortingView().getElement());
 
-const siteTripEventsListElement = siteTripEventsElement.querySelector('.trip-events__list');
+const pointListComponent =  new EventsListView();
+render(siteTripEventsElement, pointListComponent.getElement());
 
-render(siteTripEventsListElement, createSiteEditFormTemplate(taskArray[0]));
-
-for (const task of taskArray.slice(1)) {
-  render(siteTripEventsListElement, createSiteTripPointTemplate(task));
+for (const point of points) {
+  renderPoint(pointListComponent.getElement(), point);
 }

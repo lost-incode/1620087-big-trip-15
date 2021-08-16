@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {createElement} from '../utils.js';
 
 const renderDuration = (startDate, endDate) => `<p class="event__duration">
   ${dayjs(endDate).diff(dayjs(startDate), 'd h m')}
@@ -7,13 +8,13 @@ const renderDuration = (startDate, endDate) => `<p class="event__duration">
 const renderOffers = (offers = []) => `<h4 class="visually-hidden">Offers:</h4>
   <ul class="event__selected-offers">
   ${offers.map(({title, price}) => (`<li class="event__offer">
-  <span class="event__offer-title">${title}</span>
-    &plus;&euro;&nbsp;
+  <span class="event__offer-title">${title}
+  </span>&plus;&euro;&nbsp;
   <span class="event__offer-price">${price}</span>
-  </li>`))}
+  </li>`)).join('')}
   </ul>`;
 
-export const createSiteTripPointTemplate = ({type, startDate, endDate, point, offers, basePrice, isFavourite}) => `<li class="trip-events__item">
+const createSiteTripPointTemplate = ({type, startDate, endDate, point, offers, basePrice, isFavourite}) => `<li class="trip-events__item">
   <div class="event">
     <time class="event__date" datetime="2019-03-18">${dayjs(startDate).format('DD MMM')}</time>
     <div class="event__type">
@@ -44,3 +45,26 @@ export const createSiteTripPointTemplate = ({type, startDate, endDate, point, of
     </button>
   </div>
   </li>`;
+
+export default class TripPoint {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSiteTripPointTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

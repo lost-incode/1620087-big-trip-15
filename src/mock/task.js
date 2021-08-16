@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {getRandomInteger} from '../utils.js';
 
 const COUNT_OF_DESTINATIONS = 5;
 const DATE_FORMAT= 'YYYY-MM-DDTHH:mm:ss.ms[Z]';
@@ -86,9 +87,9 @@ const pointOffers = {
   'Restaurant': [],
 };
 
-const pointCities = ['Tokio', 'New York', 'Volgograd', 'Kiev', 'Moscow'];
-const pointTypes = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
-const textDestinations = [
+const POINT_CITIES = ['Tokio', 'New York', 'Volgograd', 'Kiev', 'Moscow'];
+const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
+const TEXT_DESTINATIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   'Cras aliquet varius magna, non porta ligula feugiat eget.',
   'Fusce tristique felis at fermentum pharetra.',
@@ -101,14 +102,7 @@ const textDestinations = [
   'In rutrum ac purus sit amet tempus.',
 ];
 
-const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
-
-const generateType = (pointIndex) => pointTypes[pointIndex];
+const generateType = (pointIndex) => POINT_TYPES[pointIndex];
 
 const generateDate = (firstDate = null) => {
   if (firstDate) {
@@ -120,7 +114,7 @@ const generateDate = (firstDate = null) => {
   return dayjs().add(daysCount, 'day').toDate();
 };
 
-const generatePoint = (pointCityIndex) => pointCities[pointCityIndex];
+const generateCity = (pointCityIndex) => POINT_CITIES[pointCityIndex];
 
 const generateOffers = (type) => {
   if (!pointOffers[type].length) {
@@ -135,8 +129,8 @@ const generateOffers = (type) => {
 const generateDescription = (sentencesCount) => {
   const textDestination = [];
   for (let i = 0; i < sentencesCount; i++) {
-    const randomIndex = getRandomInteger(0, textDestinations.length - 1);
-    textDestination.push(textDestinations[randomIndex]);
+    const randomIndex = getRandomInteger(0, TEXT_DESTINATIONS.length - 1);
+    textDestination.push(TEXT_DESTINATIONS[randomIndex]);
     i++;
   }
 
@@ -152,11 +146,11 @@ const generateImages = (imagesCount) => {
   return imagesLinks;
 };
 
-const generateTask = () => {
-  const randomTypeIndex = getRandomInteger(0, pointTypes.length - 1);
+const generatePoint = () => {
+  const randomTypeIndex = getRandomInteger(0, POINT_TYPES.length - 1);
   const taskType = generateType(randomTypeIndex);
   const startDate = generateDate();
-  const randomPointIndex = getRandomInteger(0, pointCities.length - 1);
+  const randomPointIndex = getRandomInteger(0, POINT_CITIES.length - 1);
   const randomCountDestinations = getRandomInteger(1, COUNT_OF_DESTINATIONS);
   const randomCountImages = getRandomInteger(1, COUNT_OF_DESTINATIONS);
 
@@ -164,7 +158,7 @@ const generateTask = () => {
     type: taskType,
     startDate: dayjs(startDate).format(DATE_FORMAT),
     endDate: dayjs(generateDate(startDate)).format(DATE_FORMAT),
-    point: generatePoint(randomPointIndex),
+    point: generateCity(randomPointIndex),
     offers: generateOffers(taskType),
     destination: {
       description: [generateDescription(randomCountDestinations).join(' ')],
@@ -175,4 +169,4 @@ const generateTask = () => {
   };
 };
 
-export {pointOffers, generateTask};
+export {pointOffers, POINT_TYPES, DATE_FORMAT, POINT_CITIES, MIN_PRICE, generatePoint};

@@ -1,5 +1,20 @@
 import dayjs from 'dayjs';
-import {pointOffers} from '../mock/task.js';
+import {createElement} from '../utils.js';
+import {pointOffers, POINT_TYPES, DATE_FORMAT, POINT_CITIES, MIN_PRICE} from '../mock/task.js';
+
+const DEFAULT_POINT = {
+  type: POINT_TYPES[0],
+  startDate: dayjs().format(DATE_FORMAT),
+  endDate: dayjs().format(DATE_FORMAT),
+  point: POINT_CITIES[0],
+  offers: pointOffers[POINT_TYPES[0]],
+  destination: {
+    description: [],
+    images:  [],
+  },
+  basePrice: MIN_PRICE,
+  isFavourite: false,
+};
 
 const renderCheckboxDiv = (offer, offers) => {
   const checkedOffer = (offers.find((option) => option.title === offer.title)) ? 'checked' : '';
@@ -28,7 +43,7 @@ const renderDestination = (description) => description && `<section class="event
     <p class="event__destination-description">${description}</p>
     </section>`;
 
-export const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, destination, basePrice}) => `<li class="trip-events__item">
+const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, destination, basePrice}) => `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
@@ -135,3 +150,26 @@ export const createSiteEditFormTemplate = ({type, startDate, endDate, point, off
       </section>
     </form>
   </li>`;
+
+export default class EditingForm {
+  constructor(point = DEFAULT_POINT) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSiteEditFormTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
