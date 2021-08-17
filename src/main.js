@@ -33,6 +33,7 @@ const renderPoint = (pointListElement, point) => {
 
   pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
     replacePointToForm();
+    document.addEventListener('keydown', onEscKeyDown);
   });
 
   pointEditComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
@@ -58,8 +59,7 @@ render(siteNavigationElement, new SiteMenuView().getElement());
 
 const siteInfoComponent = new TripInfoView(points);
 render(siteTripMainElement, siteInfoComponent.getElement(), RenderPosition.AFTERBEGIN);
-
-render(siteInfoComponent, new TripCostView(points).getElement());
+render(siteInfoComponent.getElement(), new TripCostView(points).getElement());
 render(siteTripFiltersElement, new TripFiltersView().getElement());
 render(siteTripEventsElement, new TripSortingView().getElement());
 
