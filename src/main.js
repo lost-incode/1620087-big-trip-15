@@ -6,6 +6,7 @@ import TripSortingView from './view/sorting.js';
 import EventsListView from './view/events-list.js';
 import EditingFormView from './view/edit-form.js';
 import TripPointView from './view/trip-point.js';
+import NoPointView from './view/no-point.js';
 import {generatePoint} from './mock/task.js';
 import {render, RenderPosition} from './utils.js';
 
@@ -33,6 +34,12 @@ const renderPoint = (pointListElement, point) => {
 
   pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
     replacePointToForm();
+    document.addEventListener('keydown', onEscKeyDown);
+  });
+
+  pointEditComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceFormToPoint();
+    document.removeEventListener('keydown', onEscKeyDown);
   });
 
   pointEditComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
@@ -55,17 +62,23 @@ const siteTripEventsElement = siteMainElement.querySelector('.trip-events');
 
 // Rendering components to the page
 render(siteNavigationElement, new SiteMenuView().getElement());
-
-const siteInfoComponent = new TripInfoView(points);
-render(siteTripMainElement, siteInfoComponent.getElement(), RenderPosition.AFTERBEGIN);
-
-render(siteInfoComponent, new TripCostView(points).getElement());
 render(siteTripFiltersElement, new TripFiltersView().getElement());
-render(siteTripEventsElement, new TripSortingView().getElement());
 
-const pointListComponent =  new EventsListView();
-render(siteTripEventsElement, pointListComponent.getElement());
+if (points.length === 0) {
+  render(siteTripEventsElement, new NoPointView().getElement());
+} else {
+  const siteInfoComponent = new TripInfoView(points);
+  render(siteTripMainElement, siteInfoComponent.getElement(), RenderPosition.AFTERBEGIN);
+  render(siteInfoComponent.getElement(), new TripCostView(points).getElement());
 
-for (const point of points) {
-  renderPoint(pointListComponent.getElement(), point);
+  render(siteTripEventsElement, new TripSortingView().getElement());
+
+  const pointListComponent =  new EventsListView();
+  render(siteTripEventsElement, pointListComponent.getElement());
+
+  for (const point of points) {
+    renderPoint(pointListComponent.getElement(), point);
+  }
 }
+
+
