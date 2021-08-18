@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import AbstractView from './abstract.js';
-import {pointOffers, POINT_TYPES, DATE_FORMAT, POINT_CITIES, MIN_PRICE} from '../mock/task.js';
+import {pointOffers, POINT_TYPES, DATE_FORMAT, POINT_CITIES, MIN_PRICE} from '../mock/point.js';
 
 const DEFAULT_POINT = {
   type: POINT_TYPES[0],
