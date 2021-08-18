@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {createElement} from '../utils.js';
+import AbstractView from './abstract.js';
 import {pointOffers, POINT_TYPES, DATE_FORMAT, POINT_CITIES, MIN_PRICE} from '../mock/task.js';
 
 const DEFAULT_POINT = {
@@ -151,25 +151,13 @@ const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, de
     </form>
   </li>`;
 
-export default class EditingForm {
+export default class EditingForm extends AbstractView {
   constructor(point = DEFAULT_POINT) {
+    super();
     this._point = point;
-    this._element = null;
   }
 
   getTemplate() {
     return createSiteEditFormTemplate(this._point);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

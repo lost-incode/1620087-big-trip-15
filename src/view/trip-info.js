@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {createElement} from '../utils.js';
+import AbstractView from './abstract.js';
 
 const FIRST_POINT_INDEX = 0;
 const SECOND_POINT_INDEX = 1;
@@ -31,25 +31,13 @@ const createSiteTripInfoTemplate = (dataArray) => {
   </section>`;
 };
 
-export default class TripInfo {
+export default class TripInfo extends AbstractView {
   constructor(points) {
+    super();
     this._points = points;
-    this._element = null;
   }
 
   getTemplate() {
     return createSiteTripInfoTemplate(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

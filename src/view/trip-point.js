@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {createElement} from '../utils.js';
+import AbstractView from './abstract.js';
 
 const renderDuration = (startDate, endDate) => `<p class="event__duration">
   ${dayjs(endDate).diff(dayjs(startDate), 'd h m')}
@@ -46,25 +46,13 @@ const createSiteTripPointTemplate = ({type, startDate, endDate, point, offers, b
   </div>
   </li>`;
 
-export default class TripPoint {
+export default class TripPoint extends AbstractView {
   constructor(point) {
+    super();
     this._point = point;
-    this._element = null;
   }
 
   getTemplate() {
     return createSiteTripPointTemplate(this._point);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
