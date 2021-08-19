@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {getRandomInteger} from '../utils.js';
+import {getRandomInteger} from '../utils/common.js';
 
 const COUNT_OF_DESTINATIONS = 5;
 const DATE_FORMAT= 'YYYY-MM-DDTHH:mm:ss.ms[Z]';

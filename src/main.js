@@ -7,8 +7,8 @@ import EventsListView from './view/events-list.js';
 import EditingFormView from './view/edit-form.js';
 import TripPointView from './view/trip-point.js';
 import NoPointView from './view/no-point.js';
-import {generatePoint} from './mock/task.js';
-import {render, RenderPosition} from './utils.js';
+import {generatePoint} from './mock/point.js';
+import {render, RenderPosition, replace} from './utils/render.js';
 
 const POINT_COUNT = 22;
 
@@ -17,11 +17,11 @@ const renderPoint = (pointListElement, point) => {
   const pointEditComponent = new EditingFormView(point);
 
   const replacePointToForm = () => {
-    pointListElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+    replace(pointEditComponent, pointComponent);
   };
 
   const replaceFormToPoint = () => {
-    pointListElement.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
+    replace(pointComponent, pointEditComponent);
   };
 
   const onEscKeyDown = (evt) => {
@@ -32,23 +32,22 @@ const renderPoint = (pointListElement, point) => {
     }
   };
 
-  pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+  pointComponent.setEditClickHandler(() => {
     replacePointToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  pointEditComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+  pointEditComponent.setPointClickHandler(() => {
     replaceFormToPoint();
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-  pointEditComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  pointEditComponent.setFormSubmitHandler(() => {
     replaceFormToPoint();
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-  render(pointListElement, pointComponent.getElement());
+  render(pointListElement, pointComponent);
 };
 
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
@@ -61,23 +60,23 @@ const siteTripFiltersElement = siteTripMainElement.querySelector('.trip-controls
 const siteTripEventsElement = siteMainElement.querySelector('.trip-events');
 
 // Rendering components to the page
-render(siteNavigationElement, new SiteMenuView().getElement());
-render(siteTripFiltersElement, new TripFiltersView().getElement());
+render(siteNavigationElement, new SiteMenuView());
+render(siteTripFiltersElement, new TripFiltersView());
 
 if (points.length === 0) {
-  render(siteTripEventsElement, new NoPointView().getElement());
+  render(siteTripEventsElement, new NoPointView());
 } else {
   const siteInfoComponent = new TripInfoView(points);
-  render(siteTripMainElement, siteInfoComponent.getElement(), RenderPosition.AFTERBEGIN);
-  render(siteInfoComponent.getElement(), new TripCostView(points).getElement());
+  render(siteTripMainElement, siteInfoComponent, RenderPosition.AFTERBEGIN);
+  render(siteInfoComponent, new TripCostView(points));
 
-  render(siteTripEventsElement, new TripSortingView().getElement());
+  render(siteTripEventsElement, new TripSortingView());
 
   const pointListComponent =  new EventsListView();
-  render(siteTripEventsElement, pointListComponent.getElement());
+  render(siteTripEventsElement, pointListComponent);
 
   for (const point of points) {
-    renderPoint(pointListComponent.getElement(), point);
+    renderPoint(pointListComponent, point);
   }
 }
 

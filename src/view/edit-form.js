@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import {createElement} from '../utils.js';
-import {pointOffers, POINT_TYPES, DATE_FORMAT, POINT_CITIES, MIN_PRICE} from '../mock/task.js';
+import AbstractView from './abstract.js';
+import {pointOffers, POINT_TYPES, DATE_FORMAT, POINT_CITIES, MIN_PRICE} from '../mock/point.js';
 
 const DEFAULT_POINT = {
   type: POINT_TYPES[0],
@@ -151,25 +151,35 @@ const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, de
     </form>
   </li>`;
 
-export default class EditingForm {
+export default class EditingForm extends AbstractView {
   constructor(point = DEFAULT_POINT) {
+    super();
     this._point = point;
-    this._element = null;
+    this._pointClickHandler = this._pointClickHandler.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
   }
 
   getTemplate() {
     return createSiteEditFormTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _pointClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click();
   }
 
-  removeElement() {
-    this._element = null;
+  setPointClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._pointClickHandler);
+  }
+
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
   }
 }
