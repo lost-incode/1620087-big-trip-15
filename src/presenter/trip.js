@@ -6,6 +6,7 @@ import TripSortingView from '../view/sorting.js';
 import EventsListView from '../view/events-list.js';
 import NoPointView from '../view/no-point.js';
 import {render, RenderPosition} from '../utils/render.js';
+import {updateItem} from '../utils/common.js';
 import PointPresenter from './point.js';
 
 export default class Trip {
@@ -24,6 +25,7 @@ export default class Trip {
     this._sortComponent = new TripSortingView();
     this._noPointComponent = new NoPointView();
 
+    this._handlePointChange = this._handlePointChange.bind(this);
     // this._infoComponent = null;
     // this._costComponent = null;
   }
@@ -34,6 +36,11 @@ export default class Trip {
     this._costComponent = new TripCostView(points);
 
     this._renderTrip(points);
+  }
+
+  _handlePointChange(updatedPoint) {
+    this.__points = updateItem(this._points, updatedPoint);
+    this._pointPresenter.get(updatedPoint.id).init(updatedPoint);
   }
 
   _renderMenu() {
