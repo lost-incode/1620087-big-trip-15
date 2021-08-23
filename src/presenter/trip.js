@@ -1,8 +1,8 @@
-import SiteMenuView from './view/menu.js';
-import TripInfoView from './view/trip-info.js';
-import TripCostView from './view/trip-cost.js';
-import TripFiltersView from './view/filters.js';
-import {render, RenderPosition} from './utils/render.js';
+import SiteMenuView from '../view/menu.js';
+import TripInfoView from '../view/trip-info.js';
+import TripCostView from '../view/trip-cost.js';
+import TripFiltersView from '../view/filters.js';
+import {render, RenderPosition} from '../utils/render.js';
 
 export default class Trip {
   constructor(tripContainer, filterContainer, mainContainer) {

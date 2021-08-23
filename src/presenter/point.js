@@ -1,14 +1,13 @@
-import TripSortingView from './view/sorting.js';
-import EventsListView from './view/events-list.js';
-import EditingFormView from './view/edit-form.js'; //
-import TripPointView from './view/trip-point.js';//
-import NoPointView from './view/no-point.js';//
-import {render, RenderPosition, replace} from './utils/render.js'; //
+import TripSortingView from '../view/sorting.js';
+import EventsListView from '../view/events-list.js';
+import EditingFormView from '../view/edit-form.js'; //
+import TripPointView from '../view/trip-point.js';//
+import NoPointView from '../view/no-point.js';//
+import {render, replace} from '../utils/render.js'; //
 
 export default class Point {
-  constructor(pointsContainer, listContainer) {
+  constructor(pointsContainer) {
     this._pointsContainer = pointsContainer;
-    this._listContainer = listContainer;
 
     this._listComponent = new EventsListView();
     this._pointComponent = new TripPointView();
@@ -23,12 +22,12 @@ export default class Point {
     this._renderPointsList();
   }
 
-  _renderSort(container) {
-    render(container, this._sortComponent);
+  _renderSort() {
+    render(this._pointsContainer, this._sortComponent);
   }
 
-  _renderList(container) {
-    render(container, this._listComponent);
+  _renderList() {
+    render(this._pointsContainer, this._listComponent);
   }
 
   _renderPoint(container, point) {
@@ -72,12 +71,12 @@ export default class Point {
     render(container, pointComponent);
   }
 
-  _renderPoints(container) {
-    this._points.forEach((point) => this._renderPoint(container, point));
+  _renderPoints() {
+    this._points.forEach((point) => this._renderPoint(this._listComponent, point));
   }
 
   _renderNoPoints() {
-    // Метод для рендеринга заглушки
+    render(this._pointsContainer, this._noPointComponent);
   }
 
   _renderPointsList() {
@@ -86,9 +85,9 @@ export default class Point {
       return;
     }
 
-    this._renderSort(this._listContainer);
-    this._renderList(this._pointsContainer);
+    this._renderSort();
+    this._renderList();
 
-    this._renderPoints(this._listComponent);
+    this._renderPoints();
   }
 }
