@@ -149,7 +149,7 @@ const generateImages = (imagesCount) => {
 
 const generatePoint = () => {
   const randomTypeIndex = getRandomInteger(0, POINT_TYPES.length - 1);
-  const taskType = generateType(randomTypeIndex);
+  const pointType = generateType(randomTypeIndex);
   const startDate = generateDate();
   const randomPointIndex = getRandomInteger(0, POINT_CITIES.length - 1);
   const randomCountDestinations = getRandomInteger(1, COUNT_OF_DESTINATIONS);
@@ -157,17 +157,17 @@ const generatePoint = () => {
 
   return {
     id: nanoid(),
-    type: taskType,
+    type: pointType,
     startDate: dayjs(startDate).format(DATE_FORMAT),
     endDate: dayjs(generateDate(startDate)).format(DATE_FORMAT),
     point: generateCity(randomPointIndex),
-    offers: generateOffers(taskType),
+    offers: generateOffers(pointType),
     destination: {
       description: [generateDescription(randomCountDestinations).join(' ')],
       images:  generateImages(randomCountImages),
     },
     basePrice: getRandomInteger(MIN_PRICE, MAX_PRICE),
-    isFavourite: Boolean(getRandomInteger(BOOLEAN_FALSE, BOOLEAN_TRUE)),
+    isFavorite: Boolean(getRandomInteger(BOOLEAN_FALSE, BOOLEAN_TRUE)),
   };
 };
 
