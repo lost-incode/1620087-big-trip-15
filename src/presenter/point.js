@@ -1,6 +1,6 @@
 import EditingFormView from '../view/edit-form.js';
 import TripPointView from '../view/trip-point.js';
-import {render, replace} from '../utils/render.js';
+import {render, replace, remove} from '../utils/render.js';
 
 export default class Point {
   constructor(pointListContainer) {
@@ -16,6 +16,9 @@ export default class Point {
   }
 
   init(point) {
+    const prevPointComponent = this._pointComponent;
+    const prevPointEditComponent = this._pointEditComponent;
+
     this._pointComponent = new TripPointView(point);
     this._pointEditComponent = new EditingFormView(point);
 
@@ -23,7 +26,26 @@ export default class Point {
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setPointClickHandler(this._handleFormClick);
 
-    render(this._pointListContainer, this._pointComponent);
+    if (prevPointComponent === null || prevPointEditComponent === null) {
+      render(this._pointListContainer, this._pointComponent);
+      return;
+    }
+
+    if (this._pointListContainer.getElement().contains(prevPointComponent.getElement())) {
+      replace(this._pointComponent, prevPointComponent);
+    }
+
+    if (this._pointListContainer.getElement().contains(prevPointEditComponent.getElement())) {
+      replace(this._pointEditComponent, prevPointEditComponent);
+    }
+
+    remove(prevPointComponent);
+    remove(prevPointEditComponent);
+  }
+
+  destroy() {
+    remove(this._pointComponent);
+    remove(this._pointEditComponent);
   }
 
   _replacePointToForm() {

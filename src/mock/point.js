@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {nanoid} from 'nanoid';
 import {getRandomInteger} from '../utils/common.js';
 
 const COUNT_OF_DESTINATIONS = 5;
@@ -155,6 +156,7 @@ const generatePoint = () => {
   const randomCountImages = getRandomInteger(1, COUNT_OF_DESTINATIONS);
 
   return {
+    id: nanoid(),
     type: taskType,
     startDate: dayjs(startDate).format(DATE_FORMAT),
     endDate: dayjs(generateDate(startDate)).format(DATE_FORMAT),

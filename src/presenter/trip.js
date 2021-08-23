@@ -15,6 +15,8 @@ export default class Trip {
     this._mainContainer = mainContainer;
     this._pointsContainer = pointsContainer;
 
+    this._pointPresenter = new Map();
+
     this._menuComponent = new SiteMenuView();
     this._filterComponent = new TripFiltersView();
 
@@ -61,6 +63,12 @@ export default class Trip {
   _renderPoint(point) {
     const pointPresenter = new PointPresenter(this._listComponent);
     pointPresenter.init(point);
+    this._pointPresenter.set(point.id, pointPresenter);
+  }
+
+  _clearPointList() {
+    this._pointPresenter.forEach((presenter) => presenter.destroy());
+    this._pointPresenter.clear();
   }
 
   _renderPoints() {
