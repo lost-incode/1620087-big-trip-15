@@ -1,93 +1,76 @@
-import TripSortingView from '../view/sorting.js';
-import EventsListView from '../view/events-list.js';
-import EditingFormView from '../view/edit-form.js'; //
-import TripPointView from '../view/trip-point.js';//
-import NoPointView from '../view/no-point.js';//
-import {render, replace} from '../utils/render.js'; //
+import EditingFormView from '../view/edit-form.js';
+import TripPointView from '../view/trip-point.js';
+import {render, replace} from '../utils/render.js';
 
 export default class Point {
-  constructor(pointsContainer) {
-    this._pointsContainer = pointsContainer;
+  constructor(pointListContainer) {
+    this._pointListContainer = pointListContainer;
 
-    this._listComponent = new EventsListView();
-    this._pointComponent = new TripPointView();
-    this._sortComponent = new TripSortingView();
-    this._noPointComponent = new NoPointView();
+    this._pointComponent = null;
+    this._pointEditComponent = null;
+
+    this._handleEditClick = this._handleEditClick.bind(this);
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._handleFormClick = this._handleFormClick.bind(this);
+    this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
-  init(points) {
-    this._points = points.slice();
-    // render(this._boardComponent, this._taskListComponent, RenderPosition.BEFOREEND);
+  init(point) {
+    this._pointComponent = new TripPointView(point);
+    this._pointEditComponent = new EditingFormView(point);
 
-    this._renderPointsList();
+    this._pointComponent.setEditClickHandler(this._handleEditClick);
+    this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
+    this._pointEditComponent.setPointClickHandler(this._handleFormClick);
+
+    render(this._pointListContainer, this._pointComponent);
   }
 
-  _renderSort() {
-    render(this._pointsContainer, this._sortComponent);
+  _replacePointToForm() {
+    replace(this._pointEditComponent, this._pointComponent);
+    document.addEventListener('keydown', this._escKeyDownHandler);
   }
 
-  _renderList() {
-    render(this._pointsContainer, this._listComponent);
+  _replaceFormToPoint() {
+    replace(this._pointComponent, this._pointEditComponent);
+    document.removeEventListener('keydown', this._escKeyDownHandler);
   }
 
-  _renderPoint(container, point) {
-    // Метод, куда уйдёт логика созданию и рендерингу компонетов задачи,
-    // текущая функция renderTask в main.js
-
-    const pointComponent = new TripPointView(point);
-    const pointEditComponent = new EditingFormView(point);
-
-    const replacePointToForm = () => {
-      replace(pointEditComponent, pointComponent);
-    };
-
-    const replaceFormToPoint = () => {
-      replace(pointComponent, pointEditComponent);
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        replaceFormToPoint();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
-    pointComponent.setEditClickHandler(() => {
-      replacePointToForm();
-      document.addEventListener('keydown', onEscKeyDown);
-    });
-
-    pointEditComponent.setPointClickHandler(() => {
-      replaceFormToPoint();
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
-
-    pointEditComponent.setFormSubmitHandler(() => {
-      replaceFormToPoint();
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
-
-    render(container, pointComponent);
-  }
-
-  _renderPoints() {
-    this._points.forEach((point) => this._renderPoint(this._listComponent, point));
-  }
-
-  _renderNoPoints() {
-    render(this._pointsContainer, this._noPointComponent);
-  }
-
-  _renderPointsList() {
-    if (this._points.length === 0) {
-      this._renderNoPoints();
-      return;
+  _escKeyDownHandler(evt) {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      this._replaceFormToPoint();
     }
-
-    this._renderSort();
-    this._renderList();
-
-    this._renderPoints();
   }
+
+  _handleEditClick() {
+    this._replacePointToForm();
+  }
+
+  _handleFormSubmit() {
+    this._replaceFormToPoint();
+  }
+
+  _handleFormClick() {
+    this._replaceFormToPoint();
+  }
+
+  // _renderPoint() {
+  //   pointComponent.setEditClickHandler(() => {
+  //     replacePointToForm();
+  //     document.addEventListener('keydown', onEscKeyDown);
+  //   });
+
+  //   pointEditComponent.setPointClickHandler(() => {
+  //     replaceFormToPoint();
+  //     document.removeEventListener('keydown', onEscKeyDown);
+  //   });
+
+  //   pointEditComponent.setFormSubmitHandler(() => {
+  //     replaceFormToPoint();
+  //     document.removeEventListener('keydown', onEscKeyDown);
+  //   });
+
+  //   render(container, pointComponent);
+  // }
 }

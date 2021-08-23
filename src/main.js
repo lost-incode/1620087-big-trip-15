@@ -10,7 +10,6 @@
 import {generatePoint} from './mock/point.js';
 // import {render, RenderPosition, replace} from './utils/render.js';
 import TripPresenter from './presenter/trip.js';
-import PointPresenter from './presenter/point.js';
 
 const POINT_COUNT = 22;
 
@@ -24,13 +23,10 @@ const siteTripFiltersElement = siteTripMainElement.querySelector('.trip-controls
 const siteTripEventsElement = siteMainElement.querySelector('.trip-events');
 
 // Rendering components to the page
-const tripPresenter = new TripPresenter(siteNavigationElement, siteTripFiltersElement, siteTripMainElement);
+const tripPresenter = new TripPresenter(siteNavigationElement, siteTripFiltersElement, siteTripMainElement, siteTripEventsElement);
 
 tripPresenter.init(points);
 
-const pointPresenter = new PointPresenter(siteTripEventsElement);
-
-pointPresenter.init(points);
 // render(siteNavigationElement, new SiteMenuView());
 // render(siteTripFiltersElement, new TripFiltersView());
 
