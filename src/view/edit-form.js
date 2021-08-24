@@ -13,7 +13,7 @@ const DEFAULT_POINT = {
     images:  [],
   },
   basePrice: MIN_PRICE,
-  isFavourite: false,
+  isFavorite: false,
 };
 
 const renderCheckboxDiv = (offer, offers) => {
