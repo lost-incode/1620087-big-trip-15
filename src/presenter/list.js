@@ -5,10 +5,10 @@ export default class List {
   constructor(pointsContainer) {
     this._pointsContainer = pointsContainer;
 
-    this._listComponent = new EventsListView();
+    this.listComponent = new EventsListView();
   }
 
   init() {
-    render(this._pointsContainer, this._listComponent);
+    render(this._pointsContainer, this.listComponent);
   }
 }

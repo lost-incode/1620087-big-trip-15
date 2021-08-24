@@ -10,11 +10,11 @@ import MenuPresenter from './menu.js';
 import ListPresenter from './list.js';
 
 export default class Trip {
-  constructor(menuContainer, filterContainer, mainContainer, pointsContainer) {
-    this._menuContainer = menuContainer;
-    this._filterContainer = filterContainer;
-    this._mainContainer = mainContainer;
-    this._pointsContainer = pointsContainer;
+  constructor(siteHeaderElement, siteMainElement) {
+    this._menuContainer = siteHeaderElement.querySelector('.trip-controls__navigation');
+    this._mainContainer = siteHeaderElement.querySelector('.trip-main');
+    this._filterContainer = this._mainContainer.querySelector('.trip-controls__filters');
+    this._pointsContainer = siteMainElement.querySelector('.trip-events');
 
     this._pointPresenter = new Map();
 
@@ -23,6 +23,8 @@ export default class Trip {
 
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
+
+    this._listPresenter = new ListPresenter(this._pointsContainer);
   }
 
   init(points) {
@@ -65,12 +67,11 @@ export default class Trip {
   }
 
   _renderList() {
-    const listPresenter = new ListPresenter(this._pointsContainer);
-    listPresenter.init();
+    this._listPresenter.init();
   }
 
   _renderPoint(point) {
-    const pointPresenter = new PointPresenter(this._listComponent, this._handlePointChange, this._handleModeChange);
+    const pointPresenter = new PointPresenter(this._listPresenter.listComponent, this._handlePointChange, this._handleModeChange);
     pointPresenter.init(point);
     this._pointPresenter.set(point.id, pointPresenter);
   }
