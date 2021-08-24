@@ -1,27 +1,23 @@
-import SiteMenuView from '../view/menu.js';
 import TripInfoView from '../view/trip-info.js';
 import TripCostView from '../view/trip-cost.js';
-import TripFiltersView from '../view/filters.js';
 import TripSortingView from '../view/sorting.js';
-import EventsListView from '../view/events-list.js';
 import NoPointView from '../view/no-point.js';
 import {render, RenderPosition} from '../utils/render.js';
 import {updateItem} from '../utils/common.js';
 import PointPresenter from './point.js';
+import FilterPresenter from './filter.js';
+import MenuPresenter from './menu.js';
+import ListPresenter from './list.js';
 
 export default class Trip {
-  constructor(tripContainer, filterContainer, mainContainer, pointsContainer) {
-    this._tripContainer = tripContainer;
+  constructor(menuContainer, filterContainer, mainContainer, pointsContainer) {
+    this._menuContainer = menuContainer;
     this._filterContainer = filterContainer;
     this._mainContainer = mainContainer;
     this._pointsContainer = pointsContainer;
 
     this._pointPresenter = new Map();
 
-    this._menuComponent = new SiteMenuView();
-    this._filterComponent = new TripFiltersView();
-
-    this._listComponent = new EventsListView();
     this._sortComponent = new TripSortingView();
     this._noPointComponent = new NoPointView();
 
@@ -47,11 +43,13 @@ export default class Trip {
   }
 
   _renderMenu() {
-    render(this._tripContainer, this._menuComponent);
+    const menuPresenter = new MenuPresenter(this._menuContainer);
+    menuPresenter.init();
   }
 
   _renderFilter() {
-    render(this._filterContainer, this._filterComponent);
+    const filterPresenter = new FilterPresenter(this._filterContainer);
+    filterPresenter.init();
   }
 
   _renderInfo() {
@@ -67,7 +65,8 @@ export default class Trip {
   }
 
   _renderList() {
-    render(this._pointsContainer, this._listComponent);
+    const listPresenter = new ListPresenter(this._pointsContainer);
+    listPresenter.init();
   }
 
   _renderPoint(point) {
