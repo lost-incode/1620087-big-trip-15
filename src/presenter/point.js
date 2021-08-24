@@ -109,23 +109,4 @@ export default class Point {
   _handleFormClick() {
     this._replaceFormToPoint();
   }
-
-  // _renderPoint() {
-  //   pointComponent.setEditClickHandler(() => {
-  //     replacePointToForm();
-  //     document.addEventListener('keydown', onEscKeyDown);
-  //   });
-
-  //   pointEditComponent.setPointClickHandler(() => {
-  //     replaceFormToPoint();
-  //     document.removeEventListener('keydown', onEscKeyDown);
-  //   });
-
-  //   pointEditComponent.setFormSubmitHandler(() => {
-  //     replaceFormToPoint();
-  //     document.removeEventListener('keydown', onEscKeyDown);
-  //   });
-
-  //   render(container, pointComponent);
-  // }
 }

@@ -27,8 +27,6 @@ export default class Trip {
 
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
-    // this._infoComponent = null;
-    // this._costComponent = null;
   }
 
   init(points) {
