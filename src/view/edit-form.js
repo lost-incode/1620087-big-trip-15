@@ -13,7 +13,7 @@ const DEFAULT_POINT = {
     images:  [],
   },
   basePrice: MIN_PRICE,
-  isFavourite: false,
+  isFavorite: false,
 };
 
 const renderCheckboxDiv = (offer, offers) => {
@@ -175,7 +175,7 @@ export default class EditingForm extends AbstractView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit();
+    this._callback.formSubmit(this._point);
   }
 
   setFormSubmitHandler(callback) {
