@@ -5,7 +5,7 @@ import {getRandomInteger} from '../utils/common.js';
 const COUNT_OF_DESTINATIONS = 5;
 const DATE_FORMAT= 'YYYY-MM-DDTHH:mm:ss.ms[Z]';
 const MAX_DAYS_GAP = 7;
-const MIN_DAYS_GAP = 1;
+const MIN_DAYS_GAP = 0;
 const MIN_PRICE = 10;
 const MAX_PRICE = 3000;
 const BOOLEAN_FALSE = 0;
@@ -107,8 +107,11 @@ const generateType = (pointIndex) => POINT_TYPES[pointIndex];
 
 const generateDate = (firstDate = null) => {
   if (firstDate) {
-    const index = getRandomInteger(MIN_DAYS_GAP, MAX_DAYS_GAP);
-    return dayjs(firstDate).add(index, 'day');
+    const dayIndex = getRandomInteger(MIN_DAYS_GAP, MAX_DAYS_GAP);
+    const hourIndex = getRandomInteger(MIN_DAYS_GAP, MAX_DAYS_GAP);
+    const minuteIndex = getRandomInteger(MIN_DAYS_GAP, MAX_DAYS_GAP);
+
+    return dayjs(firstDate).add(dayIndex, 'day').add(hourIndex, 'hour').add(minuteIndex, 'minute');
   }
   const daysCount = getRandomInteger(-MAX_DAYS_GAP, MAX_DAYS_GAP);
 

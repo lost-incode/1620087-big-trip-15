@@ -1,9 +1,23 @@
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 import AbstractView from './abstract.js';
 
+const formatDateWithNumber = (number) => (number < 10)? `0${number}` : number;
+
+const formatDuration = (startDate, endDate) => {
+  dayjs.extend(duration);
+  const diff = dayjs(dayjs(endDate).diff(dayjs(startDate)));
+  const durationObject = dayjs.duration(diff, 'ms').$d;
+  const days = (durationObject.days)? `${formatDateWithNumber(durationObject.days)}D ` : '';
+  const hours = (!days && !durationObject.hours)? '' : `${formatDateWithNumber(durationObject.hours)}H `;
+  const minutes = `${formatDateWithNumber(durationObject.minutes)}M `;
+
+  return `${days}${hours}${minutes}`;
+};
+
 const renderDuration = (startDate, endDate) => `<p class="event__duration">
-  ${dayjs(endDate).diff(dayjs(startDate), 'd h m')}
-  </p>`;
+    ${formatDuration(startDate, endDate)}
+    </p>`;
 
 const renderOffers = (offers = []) => `<h4 class="visually-hidden">Offers:</h4>
   <ul class="event__selected-offers">
