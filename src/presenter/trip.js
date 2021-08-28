@@ -71,8 +71,8 @@ export default class Trip {
     }
 
     this._sortPoints(sortType);
-    // - Очищаем список
-    // - Рендерим список заново
+    this._clearPointList();
+    this._renderPoints();
   }
 
   _renderMenu() {

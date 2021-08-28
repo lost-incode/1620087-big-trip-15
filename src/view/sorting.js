@@ -42,11 +42,11 @@ export default class TripSorting extends AbstractView {
   }
 
   _sortTypeChangeHandler(evt) {
-    if (evt.target.tagName !== 'label') {
+    if (evt.target.tagName !== 'LABEL') {
       return;
     }
 
-    evt.preventDefault();
+    // evt.preventDefault();
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   }
 

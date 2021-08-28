@@ -6,7 +6,7 @@ export const sortTime = (pointA, pointB) => {
   const durationPointA = dayjs(pointA.endDate).diff(dayjs(pointA.startDate));
   const durationPointB = dayjs(pointB.endDate).diff(dayjs(pointB.startDate));
 
-  return (durationPointA >= durationPointB)? durationPointA : durationPointB;
+  return (durationPointA >= durationPointB)? -1 : 1;
 };
 
-export const sortPrice = (pointA, pointB) => (pointA.basePrice >= pointB.basePrice)? pointA : pointB;
+export const sortPrice = (pointA, pointB) => (pointA.basePrice >= pointB.basePrice)? -1 : 1;
