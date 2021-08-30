@@ -2,16 +2,22 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import AbstractView from './abstract.js';
 
+dayjs.extend(duration);
+
+const DEFAULT_FORMAT = 'DD[D] HH[H] mm[M]';
+const WITHOUT_DAYS_FORMAT = 'HH[H] mm[M]';
+const WITHOUT_HOURS_FORMAT = 'mm[M]';
+
 const formatDuration = (startDate, endDate) => {
-  dayjs.extend(duration);
   const diff = dayjs(dayjs(endDate).diff(dayjs(startDate)));
   const durationMs = dayjs.duration(diff, 'ms');
   const durationObject = durationMs.$d;
-  let durationFormat = 'DD[D] HH[H] mm[M]';
+  let durationFormat = DEFAULT_FORMAT;
+
   if (!durationObject.days && !durationObject.hours) {
-    durationFormat = 'mm[M]';
+    durationFormat = WITHOUT_HOURS_FORMAT;
   } else if (!durationObject.days) {
-    durationFormat = 'HH[H] mm[M]';
+    durationFormat = WITHOUT_DAYS_FORMAT;
   }
 
   return durationMs.format(durationFormat);
