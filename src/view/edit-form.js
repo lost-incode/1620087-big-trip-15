@@ -30,20 +30,20 @@ const renderCheckboxDiv = (offer, offers) => {
     </div>`;
 };
 
-const renderOffers = (type, offers = []) => {
+const renderOffers = (type, offers = [], isOffers) => {
   const offerSection = pointOffers[type].map((offer) => renderCheckboxDiv(offer, offers));
 
-  return (offers.length) ? `<section class="event__section  event__section--offers">
+  return (isOffers) ? `<section class="event__section  event__section--offers">
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
     <div class="event__available-offers">${offerSection.join('')}</div></section>` : '';
 };
 
-const renderDestination = (description, isDescription) => (isDescription) ? '' : `<section class="event__section  event__section--destination">
+const renderDestination = (description, isDescription) => (isDescription) ? `<section class="event__section  event__section--destination">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
     <p class="event__destination-description">${description}</p>
-    </section>`;
+    </section>` : '';
 
-const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, destination, basePrice, isDescription}) => `<li class="trip-events__item">
+const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, destination, basePrice, isOffers, isDescription}) => `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
@@ -145,7 +145,7 @@ const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, de
         </button>
       </header>
       <section class="event__details">
-      ${renderOffers(type, offers)}
+      ${renderOffers(type, offers, isOffers)}
       ${renderDestination(destination.description, isDescription)}
       </section>
     </form>
@@ -212,6 +212,7 @@ export default class EditingForm extends AbstractView {
       {},
       point,
       {
+        isOffers: point.offers !== [],
         isDescription: point.destination.description !== null,
       },
     );
@@ -225,7 +226,12 @@ export default class EditingForm extends AbstractView {
       data.destination.images = [];
     }
 
+    if (!data.isOffers) {
+      data.offers = [];
+    }
+
     delete data.isDescription;
+    delete data.isOffers;
 
     return data;
   }
