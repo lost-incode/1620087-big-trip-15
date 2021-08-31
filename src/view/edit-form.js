@@ -38,12 +38,12 @@ const renderOffers = (type, offers = []) => {
     <div class="event__available-offers">${offerSection.join('')}</div></section>` : '';
 };
 
-const renderDestination = (description) => description && `<section class="event__section  event__section--destination">
+const renderDestination = (description, isDescription) => (isDescription) ? '' : `<section class="event__section  event__section--destination">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
     <p class="event__destination-description">${description}</p>
     </section>`;
 
-const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, destination, basePrice}) => `<li class="trip-events__item">
+const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, destination, basePrice, isDescription}) => `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
@@ -146,7 +146,7 @@ const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, de
       </header>
       <section class="event__details">
       ${renderOffers(type, offers)}
-      ${renderDestination(destination.description)}
+      ${renderDestination(destination.description, isDescription)}
       </section>
     </form>
   </li>`;
@@ -154,13 +154,13 @@ const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, de
 export default class EditingForm extends AbstractView {
   constructor(point = DEFAULT_POINT) {
     super();
-    this._point = point;
+    this._data = EditingForm.parsePointToData(point);
     this._pointClickHandler = this._pointClickHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
   }
 
   getTemplate() {
-    return createSiteEditFormTemplate(this._point);
+    return createSiteEditFormTemplate(this._data);
   }
 
   _pointClickHandler(evt) {
@@ -175,11 +175,34 @@ export default class EditingForm extends AbstractView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit(this._point);
+    this._callback.formSubmit(EditingForm.parseDataToPoint(this._data));
   }
 
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
     this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
+  }
+
+  static parsePointToData(point) {
+    return Object.assign(
+      {},
+      point,
+      {
+        isDescription: point.destination.description !== null,
+      },
+    );
+  }
+
+  static parseDataToPoint(data) {
+    data = Object.assign({}, data);
+
+    if (!data.isDescription) {
+      data.destination.description = null;
+      data.destination.images = [];
+    }
+
+    delete data.isDescription;
+
+    return data;
   }
 }
