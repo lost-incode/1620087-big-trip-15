@@ -8,6 +8,8 @@ import PointPresenter from './point.js';
 import FilterPresenter from './filter.js';
 import MenuPresenter from './menu.js';
 import ListPresenter from './list.js';
+import {sortTime, sortPrice, sortDefault} from '../utils/point.js';
+import {SortType} from '../const.js';
 
 export default class Trip {
   constructor(siteHeaderElement, siteMainElement) {
@@ -15,6 +17,7 @@ export default class Trip {
     this._mainContainer = siteHeaderElement.querySelector('.trip-main');
     this._filterContainer = this._mainContainer.querySelector('.trip-controls__filters');
     this._pointsContainer = siteMainElement.querySelector('.trip-events');
+    this._currentSortType = SortType.DEFAULT;
 
     this._pointPresenter = new Map();
 
@@ -23,12 +26,14 @@ export default class Trip {
 
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
     this._listPresenter = new ListPresenter(this._pointsContainer);
   }
 
   init(points) {
     this._points = points.slice();
+    this._sortPoints(this._currentSortType);
     this._infoComponent = new TripInfoView(points);
     this._costComponent = new TripCostView(points);
 
@@ -42,6 +47,32 @@ export default class Trip {
   _handlePointChange(updatedPoint) {
     this.__points = updateItem(this._points, updatedPoint);
     this._pointPresenter.get(updatedPoint.id).init(updatedPoint);
+  }
+
+  _sortPoints(sortType) {
+    switch (sortType) {
+      case SortType.DEFAULT:
+        this._points.sort(sortDefault);
+        break;
+      case SortType.TIME:
+        this._points.sort(sortTime);
+        break;
+      case SortType.PRICE:
+        this._points.sort(sortPrice);
+        break;
+    }
+
+    this._currentSortType = sortType;
+  }
+
+  _handleSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+
+    this._sortPoints(sortType);
+    this._clearPointList();
+    this._renderPoints();
   }
 
   _renderMenu() {
@@ -64,6 +95,7 @@ export default class Trip {
 
   _renderSort() {
     render(this._pointsContainer, this._sortComponent);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderList() {
