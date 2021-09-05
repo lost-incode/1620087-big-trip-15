@@ -141,6 +141,12 @@ const generateDescription = (sentencesCount) => {
   return textDestination;
 };
 
+const DESCRITPTION = {};
+
+POINT_CITIES.forEach((city) => {
+  DESCRITPTION[city] = generateDescription(getRandomInteger(1, COUNT_OF_DESTINATIONS)).join(' ');
+});
+
 const generateImages = (imagesCount) => {
   const imagesLinks = [];
   for (let i = 0; i < imagesCount; i++) {
@@ -150,28 +156,35 @@ const generateImages = (imagesCount) => {
   return imagesLinks;
 };
 
+const IMAGES = {};
+
+POINT_CITIES.forEach((city) => {
+  IMAGES[city] = generateImages(getRandomInteger(1, COUNT_OF_DESTINATIONS));
+});
+
 const generatePoint = () => {
   const randomTypeIndex = getRandomInteger(0, POINT_TYPES.length - 1);
   const pointType = generateType(randomTypeIndex);
   const startDate = generateDate();
   const randomPointIndex = getRandomInteger(0, POINT_CITIES.length - 1);
-  const randomCountDestinations = getRandomInteger(1, COUNT_OF_DESTINATIONS);
-  const randomCountImages = getRandomInteger(1, COUNT_OF_DESTINATIONS);
+  // const randomCountDestinations = getRandomInteger(1, COUNT_OF_DESTINATIONS);
+  // const randomCountImages =  generateImages(getRandomInteger(1, COUNT_OF_DESTINATIONS));
+  const randomCity = generateCity(randomPointIndex);
 
   return {
     id: nanoid(),
     type: pointType,
     startDate: dayjs(startDate).format(DATE_FORMAT),
     endDate: dayjs(generateDate(startDate)).format(DATE_FORMAT),
-    point: generateCity(randomPointIndex),
+    point: randomCity,
     offers: generateOffers(pointType),
     destination: {
-      description: [generateDescription(randomCountDestinations).join(' ')],
-      images:  generateImages(randomCountImages),
+      description: DESCRITPTION[randomCity],
+      images:  IMAGES[randomCity],
     },
     basePrice: getRandomInteger(MIN_PRICE, MAX_PRICE),
     isFavorite: Boolean(getRandomInteger(BOOLEAN_FALSE, BOOLEAN_TRUE)),
   };
 };
 
-export {pointOffers, POINT_TYPES, DATE_FORMAT, POINT_CITIES, MIN_PRICE, generatePoint};
+export {pointOffers, POINT_TYPES, DATE_FORMAT, POINT_CITIES, MIN_PRICE, generatePoint, DESCRITPTION, IMAGES};

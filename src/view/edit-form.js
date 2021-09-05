@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import SmartView from './smart.js';
-import {pointOffers, POINT_TYPES, DATE_FORMAT, POINT_CITIES, MIN_PRICE} from '../mock/point.js';
+import {pointOffers, POINT_TYPES, DATE_FORMAT, POINT_CITIES, MIN_PRICE, DESCRITPTION, IMAGES} from '../mock/point.js';
 
 const DEFAULT_POINT = {
   type: POINT_TYPES[0],
@@ -146,7 +146,7 @@ export default class EditingForm extends SmartView {
       .addEventListener('click', this._typeChangeHandler);
     this.getElement()
       .querySelector('.event__input--destination')
-      .addEventListener('input', this._cityChangeHandler);
+      .addEventListener('change', this._cityChangeHandler);
     this.getElement()
       .querySelector('.event__input--price')
       .addEventListener('input', this._priceChangeHandler);
@@ -164,8 +164,13 @@ export default class EditingForm extends SmartView {
   }
 
   _cityChangeHandler() {
+    const newPoint = this.getElement().querySelector('.event__input--destination').value;
     this.updateData({
-      point: this.getElement().querySelector('.event__input--destination').value,
+      point: newPoint,
+      destination: {
+        description: DESCRITPTION[newPoint],
+        images: IMAGES[newPoint],
+      },
     });
   }
 
