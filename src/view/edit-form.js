@@ -49,7 +49,7 @@ const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, de
         <div class="event__type-wrapper">
           <label class="event__type  event__type-btn" for="event-type-toggle-1">
             <span class="visually-hidden">Choose event type</span>
-            <img class="event__type-icon" width="17" height="17" src="img/icons/flight.png" alt="Event type icon">
+            <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
           </label>
           <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -157,6 +157,11 @@ export default class EditingForm extends AbstractView {
     this._data = EditingForm.parsePointToData(point);
     this._pointClickHandler = this._pointClickHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._typeChangeHandler = this._typeChangeHandler.bind(this);
+
+    this.getElement()
+      .querySelector('.event__type-group')
+      .addEventListener('click', this._typeChangeHandler);
   }
 
   getTemplate() {
@@ -185,6 +190,15 @@ export default class EditingForm extends AbstractView {
     const newElement = this.getElement();
 
     parent.replaceChild(newElement, prevElement);
+  }
+
+  _typeChangeHandler(evt) {
+    // evt.preventDefault();
+    // evt.target.textContent;
+    this.updateData({
+      type: evt.target.textContent,
+      // offers: pointOffers[evt.target.textContent],
+    });
   }
 
   _pointClickHandler(evt) {
