@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Victoria Petruschenko](https://htmlacademy.ru/profile/id1620087).
-* Наставник: [Артём Рудов](https://htmlacademy.ru/profile/artrudov).
+* Наставник: [Иван Кривонос](https://htmlacademy.ru/profile/id1311037).
 
 ---
 
