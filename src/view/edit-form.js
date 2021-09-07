@@ -35,10 +35,10 @@ const renderCheckboxDiv = (offer, offers) => {
     </div>`;
 };
 
-const renderOffers = (type, offers = [], isOffers) => {
+const renderOffers = (type, offers = []) => {
   const offerSection = pointOffers[type].map((offer) => renderCheckboxDiv(offer, offers));
 
-  return (isOffers) ? `<section class="event__section  event__section--offers">
+  return (pointOffers[type].length !== 0) ? `<section class="event__section  event__section--offers">
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
     <div class="event__available-offers">${offerSection.join('')}</div></section>` : '';
 };
@@ -56,7 +56,7 @@ const renderTypeSelects = (type) => {
   return typeSelects.join(' ');
 };
 
-const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, destination, basePrice, isOffers, isDescription}) => `<li class="trip-events__item">
+const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, destination, basePrice, isDescription}) => `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
@@ -109,7 +109,7 @@ const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, de
         </button>
       </header>
       <section class="event__details">
-      ${renderOffers(type, offers, isOffers)}
+      ${renderOffers(type, offers)}
       ${renderDestination(destination.description, isDescription)}
       </section>
     </form>
@@ -276,7 +276,6 @@ export default class EditingForm extends SmartView {
       {},
       point,
       {
-        isOffers: point.offers !== [],
         isDescription: point.destination.description !== null,
       },
     );
@@ -290,12 +289,7 @@ export default class EditingForm extends SmartView {
       data.destination.images = [];
     }
 
-    if (!data.isOffers) {
-      data.offers = [];
-    }
-
     delete data.isDescription;
-    delete data.isOffers;
 
     return data;
   }
