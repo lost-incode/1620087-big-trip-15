@@ -1,7 +1,12 @@
 import dayjs from 'dayjs';
+import flatpickr from 'flatpickr';
+
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+
 import SmartView from './smart.js';
 import {pointOffers, POINT_TYPES, DATE_FORMAT, POINT_CITIES, MIN_PRICE, DESCRITPTION, IMAGES} from '../mock/point.js';
 
+flatpickr;
 const DEFAULT_POINT = {
   type: POINT_TYPES[0],
   startDate: dayjs().format(DATE_FORMAT),
