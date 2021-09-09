@@ -12,7 +12,8 @@ import {sortTime, sortPrice, sortDefault} from '../utils/point.js';
 import {SortType} from '../const.js';
 
 export default class Trip {
-  constructor(siteHeaderElement, siteMainElement) {
+  constructor(siteHeaderElement, siteMainElement, pointsModel) {
+    this._pointsModel = pointsModel;
     this._menuContainer = siteHeaderElement.querySelector('.trip-controls__navigation');
     this._mainContainer = siteHeaderElement.querySelector('.trip-main');
     this._filterContainer = this._mainContainer.querySelector('.trip-controls__filters');
@@ -38,6 +39,10 @@ export default class Trip {
     this._costComponent = new TripCostView(points);
 
     this._renderTrip(points);
+  }
+
+  _getPoints() {
+    return this._pointsModel.getPoints();
   }
 
   _handleModeChange() {
