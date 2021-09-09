@@ -15,4 +15,4 @@ pointsModel.setPoints(points);
 // Rendering components to the page
 const tripPresenter = new TripPresenter(siteHeaderElement, siteMainElement, pointsModel);
 
-tripPresenter.init(points);
+tripPresenter.init();
