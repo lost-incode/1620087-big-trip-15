@@ -51,6 +51,14 @@ const renderTypeSelects = (type) => {
   return typeSelects.join(' ');
 };
 
+const renderDatalistCities = (cities) => {
+  const datalistCities = cities.map((city) => `<option value="${city}"></option>`);
+
+  return `<datalist id="destination-list-1">
+    ${datalistCities.join('')}
+    </datalist>`;
+};
+
 const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, destination, basePrice, isOffers, isDescription}) => `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
@@ -74,11 +82,7 @@ const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, de
             ${type}
           </label>
           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${point}" list="destination-list-1">
-          <datalist id="destination-list-1">
-            <option value="Amsterdam"></option>
-            <option value="Geneva"></option>
-            <option value="Chamonix"></option>
-          </datalist>
+          ${renderDatalistCities(POINT_CITIES)}
         </div>
 
         <div class="event__field-group  event__field-group--time">
@@ -94,7 +98,7 @@ const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, de
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" pattern="[0-9]*" title="Доступны для ввода только числовые символы" value="${basePrice}">
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -169,7 +173,7 @@ export default class EditingForm extends SmartView {
       .addEventListener('change', this._cityChangeHandler);
     this.getElement()
       .querySelector('.event__input--price')
-      .addEventListener('input', this._priceChangeHandler);
+      .addEventListener('change', this._priceChangeHandler);
     // this.getElement()
     //   .querySelectorAll('.event__available-offers')
     //   .forEach((checkbox) => {

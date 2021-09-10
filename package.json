@@ -15,6 +15,7 @@
     "eslint": "7.31.0",
     "eslint-config-htmlacademy": "4.0.2",
     "flatpickr": "4.6.9",
+    "he": "1.2.0",
     "nanoid": "3.1.25",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",
