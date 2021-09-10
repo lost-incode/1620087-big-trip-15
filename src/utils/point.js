@@ -1,5 +1,9 @@
 import dayjs from 'dayjs';
 
+export const isFuturePoint = (pointA) => (dayjs().diff(dayjs(pointA.startDate)) <= 0);
+
+export const isPastPoint = (pointA) => (dayjs().diff(dayjs(pointA.endDate)) > 0);
+
 export const sortDefault = (pointA, pointB) => dayjs(pointA.startDate).diff(dayjs(pointB.startDate));
 
 export const sortTime = (pointA, pointB) => {
