@@ -9,7 +9,7 @@ import MenuPresenter from './menu.js';
 import ListPresenter from './list.js';
 import {sortTime, sortPrice, sortDefault} from '../utils/point.js';
 import {filter} from '../utils/filter.js';
-import {SortType, UpdateType, UserAction} from '../const.js';
+import {SortType, UpdateType, UserAction, FilterType} from '../const.js';
 
 export default class Trip {
   constructor(siteHeaderElement, siteMainElement, pointsModel, filterModel) {
@@ -17,15 +17,18 @@ export default class Trip {
     this._filterModel = filterModel;
     this._menuContainer = siteHeaderElement.querySelector('.trip-controls__navigation');
     this._mainContainer = siteHeaderElement.querySelector('.trip-main');
-
     this._pointsContainer = siteMainElement.querySelector('.trip-events');
+
+    this._filterType = FilterType.EVERYTHING;
     this._currentSortType = SortType.DEFAULT;
 
     this._pointPresenter = new Map();
 
     // this._sortComponent = new TripSortingView();
     this._sortComponent = null;
-    this._noPointComponent = new NoPointView();
+    this._noPointComponent = null;
+
+    // this._noPointComponent = new NoPointView();
 
     // this._handlePointChange = this._handlePointChange.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -49,9 +52,9 @@ export default class Trip {
   }
 
   _getPoints() {
-    const filterType = this._filterModel.getFilter();
+    this._filterType = this._filterModel.getFilter();
     const points = this._pointsModel.getPoints();
-    const filtredPoints = filter[filterType](points);
+    const filtredPoints = filter[this._filterType](points);
 
     switch (this._currentSortType) {
       case SortType.DEFAULT:
@@ -164,7 +167,11 @@ export default class Trip {
     this._pointPresenter.clear();
 
     remove(this._sortComponent);
-    remove(this._noPointComponent);
+    // remove(this._noPointComponent);
+
+    if (this._noPointComponent) {
+      remove(this._noPointComponent);
+    }
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
@@ -176,6 +183,7 @@ export default class Trip {
   }
 
   _renderNoPoints() {
+    this._noPointComponent = new NoPointView(this._filterType);
     render(this._pointsContainer, this._noPointComponent);
   }
 
