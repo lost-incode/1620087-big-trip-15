@@ -4,18 +4,20 @@ import TripSortingView from '../view/sorting.js';
 import NoPointView from '../view/no-point.js';
 import {render, RenderPosition,  remove} from '../utils/render.js';
 import PointPresenter from './point.js';
-import FilterPresenter from './filter.js';
+// import FilterPresenter from './filter.js';
 import MenuPresenter from './menu.js';
 import ListPresenter from './list.js';
 import {sortTime, sortPrice, sortDefault} from '../utils/point.js';
+import {filter} from '../utils/filter.js';
 import {SortType, UpdateType, UserAction} from '../const.js';
 
 export default class Trip {
-  constructor(siteHeaderElement, siteMainElement, pointsModel) {
+  constructor(siteHeaderElement, siteMainElement, pointsModel, filterModel) {
     this._pointsModel = pointsModel;
+    this._filterModel = filterModel;
     this._menuContainer = siteHeaderElement.querySelector('.trip-controls__navigation');
     this._mainContainer = siteHeaderElement.querySelector('.trip-main');
-    this._filterContainer = this._mainContainer.querySelector('.trip-controls__filters');
+
     this._pointsContainer = siteMainElement.querySelector('.trip-events');
     this._currentSortType = SortType.DEFAULT;
 
@@ -33,6 +35,7 @@ export default class Trip {
 
     this._listPresenter = new ListPresenter(this._pointsContainer);
     this._pointsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -40,22 +43,26 @@ export default class Trip {
     this._costComponent = new TripCostView(this._getPoints());
 
     this._renderMenu();
-    this._renderFilter();
+    // this._renderFilter();
 
     this._renderTrip();
   }
 
   _getPoints() {
+    const filterType = this._filterModel.getFilter();
+    const points = this._pointsModel.getPoints();
+    const filtredPoints = filter[filterType](points);
+
     switch (this._currentSortType) {
       case SortType.DEFAULT:
-        return this._pointsModel.getPoints().slice().sort(sortDefault);
+        return filtredPoints.sort(sortDefault);
       case SortType.TIME:
-        return this._pointsModel.getPoints().slice().sort(sortTime);
+        return filtredPoints.sort(sortTime);
       case SortType.PRICE:
-        return this._pointsModel.getPoints().slice().sort(sortPrice);
+        return filtredPoints.sort(sortPrice);
     }
 
-    return this._pointsModel.getPoints();
+    return filtredPoints;
   }
 
   _handleModeChange() {
@@ -114,10 +121,10 @@ export default class Trip {
     menuPresenter.init();
   }
 
-  _renderFilter() {
-    const filterPresenter = new FilterPresenter(this._filterContainer);
-    filterPresenter.init();
-  }
+  // _renderFilter() {
+  //   const filterPresenter = new FilterPresenter(this._filterContainer);
+  //   filterPresenter.init();
+  // }
 
   _renderInfo() {
     render(this._mainContainer, this._infoComponent, RenderPosition.AFTERBEGIN);
