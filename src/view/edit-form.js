@@ -113,15 +113,34 @@ const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, de
 export default class EditingForm extends SmartView {
   constructor(point = DEFAULT_POINT) {
     super();
+
     this._data = EditingForm.parsePointToData(point);
+
     this._pointClickHandler = this._pointClickHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
     this._cityChangeHandler = this._cityChangeHandler.bind(this);
     this._priceChangeHandler = this._priceChangeHandler.bind(this);
     // this._offersChangeHandler = this._offersChangeHandler.bind(this);
 
     this._setInnerHandlers();
+  }
+
+  // Перегружаем метод родителя removeElement,
+  // чтобы при удалении удалялся более ненужный календарь
+  removeElement() {
+    super.removeElement();
+
+    if (this._datepickerStartDate) {
+      this._datepickerStartDate.destroy();
+      this._datepickerStartDate = null;
+    }
+
+    if (this._datepickerEndDate) {
+      this._datepickerEndDate.destroy();
+      this._datepickerEndDate = null;
+    }
   }
 
   reset(point) {
@@ -138,6 +157,7 @@ export default class EditingForm extends SmartView {
     this._setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setPointClickHandler(this._callback.click);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
   _setInnerHandlers() {
@@ -205,6 +225,16 @@ export default class EditingForm extends SmartView {
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
     this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
+  }
+
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(EditingForm.parseDataToPoint(this._data));
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formDeleteClickHandler);
   }
 
   static parsePointToData(point) {
