@@ -1,7 +1,12 @@
 import dayjs from 'dayjs';
+import flatpickr from 'flatpickr';
+
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+
 import SmartView from './smart.js';
 import {pointOffers, POINT_TYPES, DATE_FORMAT, POINT_CITIES, MIN_PRICE, DESCRITPTION, IMAGES} from '../mock/point.js';
 
+flatpickr;
 const DEFAULT_POINT = {
   type: POINT_TYPES[0],
   startDate: dayjs().format(DATE_FORMAT),
@@ -30,10 +35,10 @@ const renderCheckboxDiv = (offer, offers) => {
     </div>`;
 };
 
-const renderOffers = (type, offers = [], isOffers) => {
+const renderOffers = (type, offers = []) => {
   const offerSection = pointOffers[type].map((offer) => renderCheckboxDiv(offer, offers));
 
-  return (isOffers) ? `<section class="event__section  event__section--offers">
+  return (pointOffers[type].length !== 0) ? `<section class="event__section  event__section--offers">
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
     <div class="event__available-offers">${offerSection.join('')}</div></section>` : '';
 };
@@ -51,7 +56,7 @@ const renderTypeSelects = (type) => {
   return typeSelects.join(' ');
 };
 
-const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, destination, basePrice, isOffers, isDescription}) => `<li class="trip-events__item">
+const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, destination, basePrice, isDescription}) => `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
@@ -104,7 +109,7 @@ const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, de
         </button>
       </header>
       <section class="event__details">
-      ${renderOffers(type, offers, isOffers)}
+      ${renderOffers(type, offers)}
       ${renderDestination(destination.description, isDescription)}
       </section>
     </form>
@@ -114,14 +119,20 @@ export default class EditingForm extends SmartView {
   constructor(point = DEFAULT_POINT) {
     super();
     this._data = EditingForm.parsePointToData(point);
+    this._datepickerStartDate = null;
+    this._datepickerEndDate = null;
+
     this._pointClickHandler = this._pointClickHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
+    this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
     this._cityChangeHandler = this._cityChangeHandler.bind(this);
     this._priceChangeHandler = this._priceChangeHandler.bind(this);
     // this._offersChangeHandler = this._offersChangeHandler.bind(this);
 
     this._setInnerHandlers();
+    this._setDatepickers();
   }
 
   reset(point) {
@@ -136,8 +147,46 @@ export default class EditingForm extends SmartView {
 
   restoreHandlers() {
     this._setInnerHandlers();
+    this._setDatepickers();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setPointClickHandler(this._callback.click);
+  }
+
+  _setDatepickers() {
+    if (this._datepickerStartDate) {
+      // В случае обновления компонента удаляем вспомогательные DOM-элементы,
+      // которые создает flatpickr при инициализации
+      this._datepickerStartDate.destroy();
+      this._datepickerStartDate = null;
+    }
+
+    if (this._datepickerEndDate) {
+      // В случае обновления компонента удаляем вспомогательные DOM-элементы,
+      // которые создает flatpickr при инициализации
+      this._datepickerEndDate.destroy();
+      this._datepickerEndDate = null;
+    }
+
+    this._datepickerStartDate = flatpickr(
+      this.getElement().querySelector('#event-start-time-1'),
+      {
+        dateFormat: 'd/m/y H:i',
+        enableTime: true,
+        defaultDate: this._data.startDate,
+        onChange: this._startDateChangeHandler, // На событие flatpickr передаём наш колбэк
+      },
+    );
+
+    this._datepickerEndDate = flatpickr(
+      this.getElement().querySelector('#event-end-time-1'),
+      {
+        dateFormat: 'd/m/y H:i',
+        minDate: this._data.startDate,
+        enableTime: true,
+        defaultDate: this._data.endDate,
+        onChange: this._endDateChangeHandler, // На событие flatpickr передаём наш колбэк
+      },
+    );
   }
 
   _setInnerHandlers() {
@@ -171,6 +220,21 @@ export default class EditingForm extends SmartView {
         description: DESCRITPTION[newPoint],
         images: IMAGES[newPoint],
       },
+    });
+  }
+
+  _startDateChangeHandler([userStartDate]) {
+    if (dayjs(this._data.endDate).diff(dayjs(userStartDate)) < 0) {
+      userStartDate = this._data.endDate;
+    }
+    this.updateData({
+      startDate: userStartDate,
+    });
+  }
+
+  _endDateChangeHandler([userEndDate]) {
+    this.updateData({
+      endDate: userEndDate,
     });
   }
 
@@ -212,7 +276,6 @@ export default class EditingForm extends SmartView {
       {},
       point,
       {
-        isOffers: point.offers !== [],
         isDescription: point.destination.description !== null,
       },
     );
@@ -226,12 +289,7 @@ export default class EditingForm extends SmartView {
       data.destination.images = [];
     }
 
-    if (!data.isOffers) {
-      data.offers = [];
-    }
-
     delete data.isDescription;
-    delete data.isOffers;
 
     return data;
   }
