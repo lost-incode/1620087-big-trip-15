@@ -64,7 +64,7 @@ const renderDatalistCities = (cities) => {
     </datalist>`;
 };
 
-const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, destination, basePrice, isOffers, isDescription}) => `<li class="trip-events__item">
+const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, destination, basePrice, isDescription}) => `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
