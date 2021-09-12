@@ -236,14 +236,20 @@ export default class EditingForm extends SmartView {
   }
 
   _cityChangeHandler() {
-    const newPoint = this.getElement().querySelector('.event__input--destination').value;
-    this.updateData({
-      point: newPoint,
-      destination: {
-        description: DESCRITPTION[newPoint],
-        images: IMAGES[newPoint],
-      },
-    });
+    const newPointInput = this.getElement().querySelector('.event__input--destination');
+    const newPoint = newPointInput.value;
+
+    if (POINT_CITIES.indexOf(newPoint) === -1 ) {
+      newPointInput.setCustomValidity('Select a city from the list');
+    } else {
+      this.updateData({
+        point: newPoint,
+        destination: {
+          description: DESCRITPTION[newPoint],
+          images: IMAGES[newPoint],
+        },
+      });
+    }
   }
 
   _startDateChangeHandler([userStartDate]) {
