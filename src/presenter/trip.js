@@ -1,12 +1,13 @@
 import TripInfoView from '../view/trip-info.js';
 import TripCostView from '../view/trip-cost.js';
 import TripSortingView from '../view/sorting.js';
+import EventsListView from '../view/events-list.js';
 import NoPointView from '../view/no-point.js';
 import {render, RenderPosition,  remove} from '../utils/render.js';
 import PointPresenter from './point.js';
 // import FilterPresenter from './filter.js';
-import MenuPresenter from './menu.js';
-import ListPresenter from './list.js';
+// import MenuPresenter from './menu.js';
+// import ListPresenter from './list.js';
 import PointNewPresenter from './point-new.js';
 import {sortTime, sortPrice, sortDefault} from '../utils/point.js';
 import {filter} from '../utils/filter.js';
@@ -16,7 +17,7 @@ export default class Trip {
   constructor(siteHeaderElement, siteMainElement, pointsModel, filterModel) {
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
-    this._menuContainer = siteHeaderElement.querySelector('.trip-controls__navigation');
+    // this._menuContainer = siteHeaderElement.querySelector('.trip-controls__navigation');
     this._mainContainer = siteHeaderElement.querySelector('.trip-main');
     this._pointsContainer = siteMainElement.querySelector('.trip-events');
 
@@ -26,8 +27,12 @@ export default class Trip {
     this._pointPresenter = new Map();
 
     // this._sortComponent = new TripSortingView();
+    this._listComponent = null;
     this._sortComponent = null;
     this._noPointComponent = null;
+
+    this._infoComponent = new TripInfoView(this._getPoints());
+    this._costComponent = new TripCostView(this._getPoints());
 
     // this._noPointComponent = new NoPointView();
 
@@ -37,21 +42,28 @@ export default class Trip {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._listPresenter = new ListPresenter(this._pointsContainer);
-    this._pointsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
+    // this._listPresenter = new ListPresenter(this._pointsContainer);
 
-    this._pointNewPresenter = new PointNewPresenter(this._listPresenter.listComponent, this._handleViewAction);
+    this._pointNewPresenter = new PointNewPresenter(this._listComponent, this._handleViewAction);
   }
 
   init() {
-    this._infoComponent = new TripInfoView(this._getPoints());
-    this._costComponent = new TripCostView(this._getPoints());
-
-    this._renderMenu();
+    // this._renderMenu();
     // this._renderFilter();
+    this._pointsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
 
     this._renderTrip();
+  }
+
+  destroy() {
+    this._clearTrip({resetSortType: true});
+
+    remove(this._listComponent);
+    remove(this._sortComponent);
+
+    this._pointsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   createPoint() {
@@ -129,10 +141,10 @@ export default class Trip {
     this._renderTrip();
   }
 
-  _renderMenu() {
-    const menuPresenter = new MenuPresenter(this._menuContainer);
-    menuPresenter.init();
-  }
+  // _renderMenu() {
+  //   const menuPresenter = new MenuPresenter(this._menuContainer);
+  //   menuPresenter.init();
+  // }
 
   // _renderFilter() {
   //   const filterPresenter = new FilterPresenter(this._filterContainer);
@@ -158,11 +170,16 @@ export default class Trip {
   }
 
   _renderList() {
-    this._listPresenter.init();
+    if (this._listComponent !== null) {
+      this._listComponent = null;
+    }
+
+    this._listComponent = new EventsListView();
+    render(this._pointsContainer, this._listComponent);
   }
 
   _renderPoint(point) {
-    const pointPresenter = new PointPresenter(this._listPresenter.listComponent, this._handleViewAction, this._handleModeChange);
+    const pointPresenter = new PointPresenter(this._listComponent, this._handleViewAction, this._handleModeChange);
     pointPresenter.init(point);
     this._pointPresenter.set(point.id, pointPresenter);
   }
