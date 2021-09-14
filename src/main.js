@@ -38,11 +38,12 @@ let statsComponent = null;
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
+      siteMenuComponent.setMenuItem();
       tripPresenter.init();
       remove(statsComponent);
       break;
     case MenuItem.STATS:
-      //дизэйблить фильтры и кнопку добавления новой точки
+      siteMenuComponent.setMenuItem();
       tripPresenter.destroy();
       statsComponent = new StatsView(pointsModel.getPoints());
       render(pageBodyContainer, statsComponent);

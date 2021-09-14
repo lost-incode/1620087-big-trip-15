@@ -14,8 +14,8 @@ export default class SiteMenu extends AbstractView {
   constructor() {
     super();
 
-    this.tableMenuButton = this.getElement().querySelector(`#${MenuItem.TABLE}`);
-    this.statsMenuButton = this.getElement().querySelector(`#${MenuItem.STATS}`);
+    this._tableMenuButton = this.getElement().querySelector(`#${MenuItem.TABLE}`);
+    this._statsMenuButton = this.getElement().querySelector(`#${MenuItem.STATS}`);
 
     this._menuClickHandler = this._menuClickHandler.bind(this);
   }
@@ -30,11 +30,9 @@ export default class SiteMenu extends AbstractView {
     this.getElement().addEventListener('click', this._menuClickHandler);
   }
 
-  setMenuItem(menuItem) {
-    if (menuItem !== null) {
-      this.tableMenuButton.classList.toggle(ACTIVE_BUTTON_CLASS);
-      this.statsMenuButton.classList.toggle(ACTIVE_BUTTON_CLASS);
-    }
+  setMenuItem() {
+    this._tableMenuButton.classList.toggle(ACTIVE_BUTTON_CLASS);
+    this._statsMenuButton.classList.toggle(ACTIVE_BUTTON_CLASS);
   }
 
   getTemplate() {
