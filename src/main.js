@@ -13,7 +13,7 @@ const POINT_COUNT = 22;
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
 
 const siteHeaderElement = document.querySelector('.page-header');
-const siteMainElement = document.querySelector('.page-body__page-main');
+const siteMainElement = document.querySelector('.page-main');
 const pageBodyContainer = siteMainElement.querySelector('.page-body__container');
 const filterContainer = document.querySelector('.trip-controls__filters');
 const menuContainer = siteHeaderElement.querySelector('.trip-controls__navigation');
