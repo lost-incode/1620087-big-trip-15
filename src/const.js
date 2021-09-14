@@ -23,3 +23,13 @@ export const FilterType = {
   FUTURE: 'future',
   PAST: 'past',
 };
+
+export const MenuItem = {
+  NEW_EVENT: 'NEW_EVENT',
+  TABLE: 'TABLE',
+  STATS: 'STATS',
+};
+
+export const DEFAULT_FORMAT = 'DD[D] HH[H] mm[M]';
+export const WITHOUT_DAYS_FORMAT = 'HH[H] mm[M]';
+export const WITHOUT_HOURS_FORMAT = 'mm[M]';
