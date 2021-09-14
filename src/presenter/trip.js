@@ -47,8 +47,6 @@ export default class Trip {
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
 
-    this._pointNewPresenter = new PointNewPresenter(this._pointsContainer, this._handleViewAction);
-
     this._renderTrip();
   }
 
@@ -172,6 +170,7 @@ export default class Trip {
 
     this._listComponent = new EventsListView();
     render(this._pointsContainer, this._listComponent);
+    this._pointNewPresenter = new PointNewPresenter(this._listComponent, this._handleViewAction);
   }
 
   _renderPoint(point) {
