@@ -43,9 +43,25 @@ const renderOffers = (type, offers = []) => {
     <div class="event__available-offers">${offerSection.join('')}</div></section>` : '';
 };
 
-const renderDestination = (description, isDescription) => (isDescription) ? `<section class="event__section  event__section--destination">
-    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">${description}</p>
+const renderPictures = (pictures, isPictures) => {
+  const imagesMarkup = pictures.map(({src, description}) => `<img class="event__photo" src="${src}" alt="${description}"></img>`);
+  return (isPictures) ? `<div class="event__photos-container">
+  <div class="event__photos-tape">
+  ${imagesMarkup.join(' ')}
+    </div>
+  </div>` : '';
+};
+
+const renderDescription = (description, isDescription) => (isDescription) ? `<h3 class="event__section-title  event__section-title--destination">
+  Destination
+  </h3>
+  <p class="event__destination-description">
+  ${description}
+  </p>` : '';
+
+const renderDestination = (description, isDescription, pictures, isPictures) => (isDescription || isPictures) ? `<section class="event__section  event__section--destination">
+    ${renderDescription(description, isDescription)}
+    ${renderPictures(pictures, isPictures)}
     </section>` : '';
 
 const renderTypeSelects = (type) => {
@@ -64,7 +80,7 @@ const renderDatalistCities = (cities) => {
     </datalist>`;
 };
 
-const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, destination, basePrice, isDescription}) => `<li class="trip-events__item">
+const createSiteEditFormTemplate = ({type, startDate, endDate, offers, destination, basePrice, isDescription, isPictures}) => `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
@@ -86,7 +102,7 @@ const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, de
           <label class="event__label  event__type-output" for="event-destination-1">
             ${type}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${point}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
           ${renderDatalistCities(POINT_CITIES)}
         </div>
 
@@ -114,7 +130,7 @@ const createSiteEditFormTemplate = ({type, startDate, endDate, point, offers, de
       </header>
       <section class="event__details">
       ${renderOffers(type, offers)}
-      ${renderDestination(destination.description, isDescription)}
+      ${renderDestination(destination.description, isDescription, destination.pictures, isPictures)}
       </section>
     </form>
   </li>`;
@@ -243,10 +259,10 @@ export default class EditingForm extends SmartView {
       newPointInput.setCustomValidity('Select a city from the list');
     } else {
       this.updateData({
-        point: newPoint,
         destination: {
+          name: newPoint,
           description: DESCRITPTION[newPoint],
-          images: IMAGES[newPoint],
+          pictures: IMAGES[newPoint],
         },
       });
     }
@@ -316,6 +332,7 @@ export default class EditingForm extends SmartView {
       point,
       {
         isDescription: point.destination.description !== null,
+        isPictures: point.destination.pictures !== null,
       },
     );
   }
@@ -325,10 +342,14 @@ export default class EditingForm extends SmartView {
 
     if (!data.isDescription) {
       data.destination.description = null;
-      data.destination.images = [];
+    }
+
+    if(!data.isPictures) {
+      data.destination.pictures = null;
     }
 
     delete data.isDescription;
+    delete data.isPictures;
 
     return data;
   }

@@ -7,10 +7,22 @@ import SiteMenuView from './view/menu.js';
 import StatsView from './view/stats.js';
 import {MenuItem} from './const.js';
 import {render, remove} from './utils/render.js';
+import Api from './api.js';
 
 const POINT_COUNT = 22;
+const AUTHORIZATION = 'Basic el7y237hy23779t';
+const END_POINT = 'https://15.ecmascript.pages.academy/big-trip';
 
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
+const api = new Api(END_POINT, AUTHORIZATION);
+
+api.getPoints().then((points) => {
+  console.log(points);
+  // Есть проблема: cтруктура объекта похожа, но некоторые ключи называются иначе,
+  // а ещё на сервере используется snake_case, а у нас camelCase.
+  // Можно, конечно, переписать часть нашего клиентского приложения, но зачем?
+  // Есть вариант получше - паттерн "Адаптер"
+});
 
 const siteHeaderElement = document.querySelector('.page-header');
 const siteMainElement = document.querySelector('.page-main');

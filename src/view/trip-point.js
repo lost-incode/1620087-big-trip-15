@@ -19,13 +19,13 @@ const renderOffers = (offers = []) => `<h4 class="visually-hidden">Offers:</h4>
   </li>`)).join('')}
   </ul>`;
 
-const createSiteTripPointTemplate = ({type, startDate, endDate, point, offers, basePrice, isFavorite}) => `<li class="trip-events__item">
+const createSiteTripPointTemplate = ({type, startDate, endDate, destination, offers, basePrice, isFavorite}) => `<li class="trip-events__item">
   <div class="event">
     <time class="event__date" datetime="2019-03-18">${dayjs(startDate).format('DD MMM')}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
     </div>
-    <h3 class="event__title">${type} ${he.encode(point)}</h3>
+    <h3 class="event__title">${type} ${he.encode(destination.name)}</h3>
     <div class="event__schedule">
       <p class="event__time">
         <time class="event__start-time" datetime="2019-03-18T10:30">${dayjs(startDate).format('HH:mm')}</time>

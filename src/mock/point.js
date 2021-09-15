@@ -150,7 +150,10 @@ POINT_CITIES.forEach((city) => {
 const generateImages = (imagesCount) => {
   const imagesLinks = [];
   for (let i = 0; i < imagesCount; i++) {
-    imagesLinks.push(`http://picsum.photos/248/152?r=${Math.random()}`);
+    imagesLinks.push({
+      src: `http://picsum.photos/248/152?r=${Math.random()}`,
+      description: `${DESCRITPTION[0]}`,
+    });
   }
 
   return imagesLinks;
@@ -176,11 +179,11 @@ const generatePoint = () => {
     type: pointType,
     startDate: dayjs(startDate).format(DATE_FORMAT),
     endDate: dayjs(generateDate(startDate)).format(DATE_FORMAT),
-    point: randomCity,
     offers: generateOffers(pointType),
     destination: {
+      name: randomCity,
       description: DESCRITPTION[randomCity],
-      images:  IMAGES[randomCity],
+      pictures:  IMAGES[randomCity],
     },
     basePrice: getRandomInteger(MIN_PRICE, MAX_PRICE),
     isFavorite: Boolean(getRandomInteger(BOOLEAN_FALSE, BOOLEAN_TRUE)),
