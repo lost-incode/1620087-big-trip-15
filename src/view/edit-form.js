@@ -20,11 +20,11 @@ const DEFAULT_POINT = {
   isFavorite: false,
 };
 
-// const renderCheckboxDiv = (offer, offers) => {
+// const renderCheckboxDiv = (offer, offers, isDisabled) => {
 //   const checkedOffer = (offers.find((option) => option.title === offer.title)) ? 'checked' : '';
 
 //   return `<div class="event__offer-selector">
-//     <input class="event__offer-checkbox  visually-hidden" id="${offer.id}"
+//     <input class="event__offer-checkbox  visually-hidden" id="${offer.id}  ${isDisabled ? 'disabled' : ''}"
 //     type="checkbox" name="${offer.name}" ${checkedOffer}>
 //     <label class="event__offer-label" for="${offer.id}">
 //         <span class="event__offer-title">${offer.title}</span>
@@ -63,9 +63,9 @@ const renderDestination = (description, isDescription, pictures, isPictures) => 
     ${renderPictures(pictures, isPictures)}
     </section>` : '';
 
-const renderTypeSelects = (type) => {
+const renderTypeSelects = (type, isDisabled) => {
   const typeSelects = POINT_TYPES.map((defaultType) => `<div class="event__type-item">
-    <input id="event-type-${defaultType.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${defaultType.toLowerCase()}" ${(defaultType === type)? 'checked' : ''}>
+    <input id="event-type-${defaultType.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${defaultType.toLowerCase()}" ${(defaultType === type)? 'checked' : '' }  ${isDisabled ? 'disabled' : ''}>
     <label class="event__type-label  event__type-label--${defaultType.toLowerCase()}" for="event-type-${defaultType}-1">${defaultType}</label>
   </div>`);
   return typeSelects.join(' ');
@@ -79,7 +79,7 @@ const renderDatalistCities = (cities) => {
     </datalist>`;
 };
 
-const createSiteEditFormTemplate = ({type, startDate, endDate, offers, destination, basePrice, isDescription, isPictures}) => `<li class="trip-events__item">
+const createSiteEditFormTemplate = ({type, startDate, endDate, offers, destination, basePrice, isDescription, isPictures,  isSaving, isDeleting,isDisabled}) => `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
@@ -87,12 +87,12 @@ const createSiteEditFormTemplate = ({type, startDate, endDate, offers, destinati
             <span class="visually-hidden">Choose event type</span>
             <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
           </label>
-          <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+          <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox"  ${isDisabled ? 'disabled' : ''}>
 
           <div class="event__type-list">
             <fieldset class="event__type-group">
               <legend class="visually-hidden">Event type</legend>
-              ${renderTypeSelects(type)}
+              ${renderTypeSelects(type, isDisabled)}
             </fieldset>
           </div>
         </div>
@@ -101,16 +101,16 @@ const createSiteEditFormTemplate = ({type, startDate, endDate, offers, destinati
           <label class="event__label  event__type-output" for="event-destination-1">
             ${type}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}"  ${isDisabled ? 'disabled' : ''} list="destination-list-1">
           ${renderDatalistCities(POINT_CITIES)}
         </div>
 
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dayjs(startDate).format('DD/MM/YY HH:MM')}">
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dayjs(startDate).format('DD/MM/YY HH:MM')}"  ${isDisabled ? 'disabled' : ''}>
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dayjs(endDate).format('DD/MM/YY HH:MM')}">
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dayjs(endDate).format('DD/MM/YY HH:MM')}"  ${isDisabled ? 'disabled' : ''}>
         </div>
 
         <div class="event__field-group  event__field-group--price">
@@ -118,12 +118,12 @@ const createSiteEditFormTemplate = ({type, startDate, endDate, offers, destinati
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" pattern="[0-9]*" title="Доступны для ввода только числовые символы" value="${basePrice}">
+          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" pattern="[0-9]*" title="Доступны для ввода только числовые символы" value="${basePrice}"  ${isDisabled ? 'disabled' : ''}>
         </div>
 
-        <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-        <button class="event__reset-btn" type="reset">Delete</button>
-        <button class="event__rollup-btn" type="button">
+        <button class="event__save-btn  btn  btn--blue" type="submit"  ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
+        <button class="event__reset-btn" type="reset"  ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
+        <button class="event__rollup-btn" type="button"  ${isDisabled ? 'disabled' : ''}>
           <span class="visually-hidden">Open event</span>
         </button>
       </header>
@@ -334,6 +334,9 @@ export default class EditingForm extends SmartView {
       {
         isDescription: point.destination.description !== null,
         isPictures: point.destination.pictures !== null,
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
       },
     );
   }
@@ -351,6 +354,9 @@ export default class EditingForm extends SmartView {
 
     delete data.isDescription;
     delete data.isPictures;
+    delete data.isDisabled;
+    delete data.isSaving;
+    delete data.isDeleting;
 
     return data;
   }
