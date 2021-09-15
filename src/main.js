@@ -25,7 +25,7 @@ const filterModel = new FilterModel();
 // Rendering components to the page
 const siteMenuComponent = new SiteMenuView();
 const filterPresenter = new FilterPresenter(filterContainer, filterModel, pointsModel);
-const tripPresenter = new TripPresenter(siteHeaderElement, siteMainElement, pointsModel, filterModel);
+const tripPresenter = new TripPresenter(siteHeaderElement, siteMainElement, pointsModel, filterModel, api);
 
 let statsComponent = null;
 //добавление статистики
