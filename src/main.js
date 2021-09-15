@@ -1,4 +1,3 @@
-import {generatePoint} from './mock/point.js';
 import TripPresenter from './presenter/trip.js';
 import FilterPresenter from './presenter/filter.js';
 import PointsModel from './model/points.js';
@@ -9,20 +8,8 @@ import {MenuItem} from './const.js';
 import {render, remove} from './utils/render.js';
 import Api from './api.js';
 
-const POINT_COUNT = 22;
 const AUTHORIZATION = 'Basic el7y237hy23779t';
 const END_POINT = 'https://15.ecmascript.pages.academy/big-trip';
-
-const points = new Array(POINT_COUNT).fill().map(generatePoint);
-const api = new Api(END_POINT, AUTHORIZATION);
-
-api.getPoints().then((points) => {
-  console.log(points);
-  // Есть проблема: cтруктура объекта похожа, но некоторые ключи называются иначе,
-  // а ещё на сервере используется snake_case, а у нас camelCase.
-  // Можно, конечно, переписать часть нашего клиентского приложения, но зачем?
-  // Есть вариант получше - паттерн "Адаптер"
-});
 
 const siteHeaderElement = document.querySelector('.page-header');
 const siteMainElement = document.querySelector('.page-main');
@@ -30,19 +17,15 @@ const pageBodyContainer = siteMainElement.querySelector('.page-body__container')
 const filterContainer = document.querySelector('.trip-controls__filters');
 const menuContainer = siteHeaderElement.querySelector('.trip-controls__navigation');
 
-const siteMenuComponent = new SiteMenuView();
-
-render(menuContainer, siteMenuComponent);
+const api = new Api(END_POINT, AUTHORIZATION);
 
 const pointsModel = new PointsModel();
-pointsModel.setPoints(points);
-
 const filterModel = new FilterModel();
 
 // Rendering components to the page
+const siteMenuComponent = new SiteMenuView();
 const filterPresenter = new FilterPresenter(filterContainer, filterModel, pointsModel);
 const tripPresenter = new TripPresenter(siteHeaderElement, siteMainElement, pointsModel, filterModel);
-
 
 let statsComponent = null;
 //добавление статистики
@@ -65,11 +48,15 @@ const handleSiteMenuClick = (menuItem) => {
 
 siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 
+render(menuContainer, siteMenuComponent);
 filterPresenter.init();
-
 tripPresenter.init();
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
   evt.preventDefault();
   tripPresenter.createPoint();
+});
+
+api.getPoints().then((points) => {
+  pointsModel.setPoints(points);
 });
