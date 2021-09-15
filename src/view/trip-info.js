@@ -14,13 +14,12 @@ const formatEndDate = (startDate, endDate) => {
 
 const createSiteTripInfoTemplate = (dataArray) => {
   const lastPointIndex = dataArray.length - 1;
-
   return `<section class="trip-main__trip-info  trip-info">
     <div class="trip-info__main">
       <h1 class="trip-info__title">
-      ${dataArray[FIRST_POINT_INDEX].point} &mdash;
-      ${(dataArray.length <= MAX_LENGTH_VALUE) ? dataArray[SECOND_POINT_INDEX].point : '...'}
-      &mdash; ${dataArray[lastPointIndex].point}
+      ${dataArray[FIRST_POINT_INDEX].destination.name} &mdash;
+      ${(dataArray.length <= MAX_LENGTH_VALUE) ? dataArray[SECOND_POINT_INDEX].destination.name : '...'}
+      &mdash; ${dataArray[lastPointIndex].destination.name}
     </h1>
       <p class="trip-info__dates">
       ${dayjs(dataArray[FIRST_POINT_INDEX].startDate).format('MMM DD')}

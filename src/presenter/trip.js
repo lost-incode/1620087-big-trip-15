@@ -3,6 +3,7 @@ import TripCostView from '../view/trip-cost.js';
 import TripSortingView from '../view/sorting.js';
 import EventsListView from '../view/events-list.js';
 import NoPointView from '../view/no-point.js';
+import LoadingView from '../view/loading.js';
 import {render, RenderPosition,  remove} from '../utils/render.js';
 import PointPresenter from './point.js';
 // import FilterPresenter from './filter.js';
@@ -23,6 +24,7 @@ export default class Trip {
 
     this._filterType = FilterType.EVERYTHING;
     this._currentSortType = SortType.DEFAULT;
+    this._isLoading = true;
 
     this._pointPresenter = new Map();
 
@@ -31,8 +33,7 @@ export default class Trip {
     this._sortComponent = null;
     this._noPointComponent = null;
 
-    this._infoComponent = new TripInfoView(this._getPoints());
-    this._costComponent = new TripCostView(this._getPoints());
+    this._loadingComponent = new LoadingView();
 
     // this._noPointComponent = new NoPointView();
 
@@ -122,6 +123,11 @@ export default class Trip {
         this._clearTrip({resetSortType: true});
         this._renderTrip();
         break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
+        this._renderTrip();
+        break;
     }
   }
 
@@ -146,10 +152,12 @@ export default class Trip {
   // }
 
   _renderInfo() {
+    this._infoComponent = new TripInfoView(this._getPoints());
     render(this._mainContainer, this._infoComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderCost() {
+    this._costComponent = new TripCostView(this._getPoints());
     render(this._infoComponent, this._costComponent);
   }
 
@@ -189,7 +197,10 @@ export default class Trip {
     this._pointPresenter.forEach((presenter) => presenter.destroy());
     this._pointPresenter.clear();
 
+    remove(this._infoComponent);
+    remove(this._costComponent);
     remove(this._sortComponent);
+    remove(this._loadingComponent);
     // remove(this._noPointComponent);
 
     if (this._noPointComponent) {
@@ -205,12 +216,21 @@ export default class Trip {
     points.forEach((point) => this._renderPoint(point));
   }
 
+  _renderLoading() {
+    render(this._pointsContainer, this._loadingComponent, RenderPosition.AFTERBEGIN);
+  }
+
   _renderNoPoints() {
     this._noPointComponent = new NoPointView(this._filterType);
     render(this._pointsContainer, this._noPointComponent);
   }
 
   _renderTrip() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     const points = this._getPoints();
     if (points.length === 0) {
       this._renderNoPoints();

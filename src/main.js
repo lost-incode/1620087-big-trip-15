@@ -4,11 +4,11 @@ import PointsModel from './model/points.js';
 import FilterModel from './model/filter.js';
 import SiteMenuView from './view/menu.js';
 import StatsView from './view/stats.js';
-import {MenuItem} from './const.js';
+import {MenuItem, UpdateType} from './const.js';
 import {render, remove} from './utils/render.js';
 import Api from './api.js';
 
-const AUTHORIZATION = 'Basic el7y237hy23779t';
+const AUTHORIZATION = 'Basic el7y2374523779t';
 const END_POINT = 'https://15.ecmascript.pages.academy/big-trip';
 
 const siteHeaderElement = document.querySelector('.page-header');
@@ -46,9 +46,6 @@ const handleSiteMenuClick = (menuItem) => {
   }
 };
 
-siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
-
-render(menuContainer, siteMenuComponent);
 filterPresenter.init();
 tripPresenter.init();
 
@@ -57,6 +54,14 @@ document.querySelector('.trip-main__event-add-btn').addEventListener('click', (e
   tripPresenter.createPoint();
 });
 
-api.getPoints().then((points) => {
-  pointsModel.setPoints(points);
-});
+api.getPoints()
+  .then((points) => {
+    pointsModel.setPoints(UpdateType.INIT, points);
+    render(menuContainer, siteMenuComponent);
+    siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+  })
+  .catch(() => {
+    pointsModel.setPoints(UpdateType.INIT, []);
+    render(menuContainer, siteMenuComponent);
+    siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+  });

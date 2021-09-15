@@ -6,7 +6,6 @@ import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import SmartView from './smart.js';
 import {pointOffers, POINT_TYPES, DATE_FORMAT, POINT_CITIES, MIN_PRICE, DESCRITPTION, IMAGES} from '../mock/point.js';
 
-flatpickr;
 const DEFAULT_POINT = {
   type: POINT_TYPES[0],
   startDate: dayjs().format(DATE_FORMAT),
@@ -21,27 +20,27 @@ const DEFAULT_POINT = {
   isFavorite: false,
 };
 
-const renderCheckboxDiv = (offer, offers) => {
-  const checkedOffer = (offers.find((option) => option.title === offer.title)) ? 'checked' : '';
+// const renderCheckboxDiv = (offer, offers) => {
+//   const checkedOffer = (offers.find((option) => option.title === offer.title)) ? 'checked' : '';
 
-  return `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="${offer.id}"
-    type="checkbox" name="${offer.name}" ${checkedOffer}>
-    <label class="event__offer-label" for="${offer.id}">
-        <span class="event__offer-title">${offer.title}</span>
-        &plus;&euro;&nbsp;
-        <span class="event__offer-price">${offer.price}</span>
-      </label>
-    </div>`;
-};
+//   return `<div class="event__offer-selector">
+//     <input class="event__offer-checkbox  visually-hidden" id="${offer.id}"
+//     type="checkbox" name="${offer.name}" ${checkedOffer}>
+//     <label class="event__offer-label" for="${offer.id}">
+//         <span class="event__offer-title">${offer.title}</span>
+//         &plus;&euro;&nbsp;
+//         <span class="event__offer-price">${offer.price}</span>
+//       </label>
+//     </div>`;
+// };
 
-const renderOffers = (type, offers = []) => {
-  const offerSection = pointOffers[type].map((offer) => renderCheckboxDiv(offer, offers));
+// const renderOffers = (type, offers = []) => {
+//   const offerSection = pointOffers[type].map((offer) => renderCheckboxDiv(offer, offers));
 
-  return (pointOffers[type].length !== 0) ? `<section class="event__section  event__section--offers">
-    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-    <div class="event__available-offers">${offerSection.join('')}</div></section>` : '';
-};
+//   return (pointOffers[type].length !== 0) ? `<section class="event__section  event__section--offers">
+//     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+//     <div class="event__available-offers">${offerSection.join('')}</div></section>` : '';
+// };
 
 const renderPictures = (pictures, isPictures) => {
   const imagesMarkup = pictures.map(({src, description}) => `<img class="event__photo" src="${src}" alt="${description}"></img>`);
@@ -129,7 +128,7 @@ const createSiteEditFormTemplate = ({type, startDate, endDate, offers, destinati
         </button>
       </header>
       <section class="event__details">
-      ${renderOffers(type, offers)}
+      ${offers}
       ${renderDestination(destination.description, isDescription, destination.pictures, isPictures)}
       </section>
     </form>
@@ -151,6 +150,8 @@ export default class EditingForm extends SmartView {
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
     this._cityChangeHandler = this._cityChangeHandler.bind(this);
     this._priceChangeHandler = this._priceChangeHandler.bind(this);
+
+
     // this._offersChangeHandler = this._offersChangeHandler.bind(this);
 
     this._setInnerHandlers();
